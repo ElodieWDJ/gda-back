@@ -2,7 +2,7 @@ package dev.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.controller.vm.CollegueVM;
-import dev.domain.Employe;
+import dev.domain.Collegue;
 import dev.repository.CollegueRepo;
 import io.jsonwebtoken.Jwts;
 import org.slf4j.Logger;
@@ -60,7 +60,7 @@ public class JWTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
 
         String rolesList = user.getAuthorities().stream().map(a -> a.getAuthority()).collect(Collectors.joining(","));
 
-        Employe collegue = collegueRepo.findByEmail(user.getUsername()).orElseThrow(() -> new IllegalArgumentException("L'email ne correspond à aucun collegue"));
+        Collegue collegue = collegueRepo.findByEmail(user.getUsername()).orElseThrow(() -> new IllegalArgumentException("L'email ne correspond à aucun collegue"));
 
         response.setContentType("application/json");
         response.getWriter().write(mapper.writeValueAsString(new CollegueVM(collegue)));

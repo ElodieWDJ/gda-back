@@ -9,7 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication
 @PropertySource("classpath:application.properties")
-public class DemoApplication {
+public class DemoApplication  {
 
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
