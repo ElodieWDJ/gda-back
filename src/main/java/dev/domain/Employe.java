@@ -18,7 +18,7 @@ public class Employe {
 
     private String motDePasse;
 
-    @OneToMany(mappedBy = "collegue", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "employe", cascade = CascadeType.PERSIST)
     private List<RoleEmploye> roles;
     
     public Long getId() {

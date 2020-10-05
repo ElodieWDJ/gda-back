@@ -10,8 +10,8 @@ public class RoleEmploye {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "collegue_id")
-    private Employe collegue;
+    @JoinColumn(name = "employe_id")
+    private Employe employe;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -19,8 +19,8 @@ public class RoleEmploye {
     public RoleEmploye() {
     }
 
-    public RoleEmploye(Employe collegue, Role role) {
-        this.collegue = collegue;
+    public RoleEmploye(Employe employe, Role role) {
+        this.employe = employe;
         this.role = role;
     }
 
@@ -40,11 +40,11 @@ public class RoleEmploye {
         this.role = role;
     }
 
-    public Employe getCollegue() {
-        return collegue;
+    public Employe getEmploye() {
+        return employe;
     }
 
-    public void setCollegue(Employe collegue) {
-        this.collegue = collegue;
+    public void setEmploye(Employe collegue) {
+        this.employe = collegue;
     }
 }
