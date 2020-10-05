@@ -1,6 +1,6 @@
 package dev.controller.vm;
 
-import dev.domain.Collegue;
+import dev.domain.Employe;
 import dev.domain.Role;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ public class CollegueVM {
     private String prenom;
     private List<Role> roles = new ArrayList<>();
 
-    public CollegueVM(Collegue col) {
+    public CollegueVM(Employe col) {
         this.email = col.getEmail();
         this.nom = col.getNom();
         this.prenom = col.getPrenom();

@@ -3,7 +3,7 @@ package dev.domain;
 import javax.persistence.*;
 
 @Entity
-public class RoleCollegue {
+public class RoleEmploye {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,15 +11,15 @@ public class RoleCollegue {
 
     @ManyToOne
     @JoinColumn(name = "collegue_id")
-    private Collegue collegue;
+    private Employe collegue;
 
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    public RoleCollegue() {
+    public RoleEmploye() {
     }
 
-    public RoleCollegue(Collegue collegue, Role role) {
+    public RoleEmploye(Employe collegue, Role role) {
         this.collegue = collegue;
         this.role = role;
     }
@@ -40,11 +40,11 @@ public class RoleCollegue {
         this.role = role;
     }
 
-    public Collegue getCollegue() {
+    public Employe getCollegue() {
         return collegue;
     }
 
-    public void setCollegue(Collegue collegue) {
+    public void setCollegue(Employe collegue) {
         this.collegue = collegue;
     }
 }
