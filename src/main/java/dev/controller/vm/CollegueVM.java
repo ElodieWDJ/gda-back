@@ -1,7 +1,7 @@
 package dev.controller.vm;
 
 import dev.domain.Collegue;
-import dev.domain.eRole;
+import dev.domain.ERole;
 
 import java.util.ArrayList;
 import java.util.List;

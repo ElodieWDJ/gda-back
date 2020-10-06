@@ -1,5 +1,5 @@
 package dev.domain;
 
-public enum eTypeJourAbsence {
+public enum ETypeJourAbsence {
 	CONGE_PAYE, RTT, JOUR_FERIE
 }

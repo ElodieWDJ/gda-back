@@ -14,12 +14,12 @@ public class RoleCollegue {
     private Collegue collegue;
 
     @Enumerated(EnumType.STRING)
-    private eRole role;
+    private ERole role;
 
     public RoleCollegue() {
     }
 
-    public RoleCollegue(Collegue collegue, eRole role) {
+    public RoleCollegue(Collegue collegue, ERole role) {
         this.collegue = collegue;
         this.role = role;
     }
@@ -32,11 +32,11 @@ public class RoleCollegue {
         this.id = id;
     }
 
-    public eRole getRole() {
+    public ERole getRole() {
         return role;
     }
 
-    public void setRole(eRole role) {
+    public void setRole(ERole role) {
         this.role = role;
     }
 

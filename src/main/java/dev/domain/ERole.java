@@ -1,11 +1,11 @@
 package dev.domain;
 
-public enum eRole {
+public enum ERole {
 	ROLE_UTILISATEUR(1), ROLE_ADMINISTRATEUR(2), ROLE_MANAGER(3);
 	
 	private Integer value;
 	
-	private eRole(Integer value) {
+	private ERole(Integer value) {
 		this.value = value;
 	}
 

@@ -14,7 +14,7 @@ public class JourAbsence {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
-	private eTypeJourAbsence typeJourAbsence;
+	private ETypeJourAbsence typeJourAbsence;
 
 	private LocalDate dateDuJour;
 
@@ -41,14 +41,14 @@ public class JourAbsence {
 	/**
 	 * @return the typeJourAbsence
 	 */
-	public eTypeJourAbsence getTypeJourAbsence() {
+	public ETypeJourAbsence getTypeJourAbsence() {
 		return typeJourAbsence;
 	}
 
 	/**
 	 * @param typeJourAbsence the typeJourAbsence to set
 	 */
-	public void setTypeJourAbsence(eTypeJourAbsence typeJourAbsence) {
+	public void setTypeJourAbsence(ETypeJourAbsence typeJourAbsence) {
 		this.typeJourAbsence = typeJourAbsence;
 	}
 

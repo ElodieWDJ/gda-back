@@ -27,7 +27,7 @@ public class Absence {
 
 	private String commentaireAbsence;
 
-	private eStatutDemandeAbsence statutDemandeAbsence;
+	private EStatutDemandeAbsence statutDemandeAbsence;
 
 	@ManyToOne
 //	@JoinColumn(name = "COLLEGUE_ID")
@@ -81,11 +81,11 @@ public class Absence {
 		this.commentaireAbsence = commentaireAbsence;
 	}
 
-	public eStatutDemandeAbsence getStatutDemandeAbsence() {
+	public EStatutDemandeAbsence getStatutDemandeAbsence() {
 		return statutDemandeAbsence;
 	}
 
-	public void setStatutDemandeAbsence(eStatutDemandeAbsence statutDemandeAbsence) {
+	public void setStatutDemandeAbsence(EStatutDemandeAbsence statutDemandeAbsence) {
 		this.statutDemandeAbsence = statutDemandeAbsence;
 	}
 
