@@ -9,7 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import dev.domain.Collegue;
-import dev.domain.Role;
+import dev.domain.eRole;
 import dev.domain.RoleCollegue;
 import dev.domain.Version;
 import dev.repository.CollegueRepo;
@@ -45,8 +45,8 @@ public class StartupListener {
 		col1.setPrenom("DEV");
 		col1.setEmail("admin@dev.fr");
 		col1.setMotDePasse(passwordEncoder.encode("superpass"));
-		col1.setRoles(Arrays.asList(new RoleCollegue(col1, Role.ROLE_ADMINISTRATEUR),
-				new RoleCollegue(col1, Role.ROLE_UTILISATEUR)));
+		col1.setRoles(Arrays.asList(new RoleCollegue(col1, eRole.ROLE_ADMINISTRATEUR),
+				new RoleCollegue(col1, eRole.ROLE_UTILISATEUR)));
 		this.collegueRepo.save(col1);
 
 		Collegue col2 = new Collegue();
@@ -54,7 +54,7 @@ public class StartupListener {
 		col2.setPrenom("DEV");
 		col2.setEmail("user@dev.fr");
 		col2.setMotDePasse(passwordEncoder.encode("superpass"));
-		col2.setRoles(Arrays.asList(new RoleCollegue(col2, Role.ROLE_UTILISATEUR)));
+		col2.setRoles(Arrays.asList(new RoleCollegue(col2, eRole.ROLE_UTILISATEUR)));
 		this.collegueRepo.save(col2);
 
 		Collegue col3 = new Collegue();
@@ -62,7 +62,7 @@ public class StartupListener {
 		col3.setPrenom("Eponge");
 		col3.setEmail("bobeponge@superApp.com");
 		col3.setMotDePasse(passwordEncoder.encode("superpass"));
-		col3.setRoles(Arrays.asList(new RoleCollegue(col3, Role.ROLE_UTILISATEUR)));
+		col3.setRoles(Arrays.asList(new RoleCollegue(col3, eRole.ROLE_UTILISATEUR)));
 		this.collegueRepo.save(col3);
 
 		Collegue col4 = new Collegue();
@@ -70,8 +70,8 @@ public class StartupListener {
 		col4.setPrenom("Hugo");
 		col4.setEmail("hugoboss@superApp.com");
 		col4.setMotDePasse(passwordEncoder.encode("superpass"));
-		col4.setRoles(Arrays.asList(new RoleCollegue(col4, Role.ROLE_UTILISATEUR),
-				new RoleCollegue(col4, Role.ROLE_MANAGER)));
+		col4.setRoles(Arrays.asList(new RoleCollegue(col4, eRole.ROLE_UTILISATEUR),
+				new RoleCollegue(col4, eRole.ROLE_MANAGER)));
 		this.collegueRepo.save(col4);
 
 		Collegue col5 = new Collegue();
@@ -79,7 +79,7 @@ public class StartupListener {
 		col5.setPrenom("Hugo");
 		col5.setEmail("hugogaston@superApp.com");
 		col5.setMotDePasse(passwordEncoder.encode("superpass"));
-		col5.setRoles(Arrays.asList(new RoleCollegue(col5, Role.ROLE_UTILISATEUR)));
+		col5.setRoles(Arrays.asList(new RoleCollegue(col5, eRole.ROLE_UTILISATEUR)));
 		this.collegueRepo.save(col5);
 	}
 

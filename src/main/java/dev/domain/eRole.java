@@ -1,5 +1,5 @@
 package dev.domain;
 
-public enum Role {
+public enum eRole {
 	ROLE_UTILISATEUR, ROLE_ADMINISTRATEUR, ROLE_MANAGER
 }
