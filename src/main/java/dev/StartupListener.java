@@ -8,6 +8,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import dev.domain.Absence;
 import dev.domain.Collegue;
 import dev.domain.eRole;
 import dev.domain.RoleCollegue;
@@ -81,6 +82,7 @@ public class StartupListener {
 		col5.setMotDePasse(passwordEncoder.encode("superpass"));
 		col5.setRoles(Arrays.asList(new RoleCollegue(col5, eRole.ROLE_UTILISATEUR)));
 		this.collegueRepo.save(col5);
+
 	}
 
 }

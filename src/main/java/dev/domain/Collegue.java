@@ -28,7 +28,7 @@ public class Collegue {
 	private List<RoleCollegue> roles;
 
 	@OneToMany(mappedBy = "collegue")
-	private List<Absence> absences;
+	private List<Absence> absencesDuCollegue;
 
 	public Long getId() {
 		return id;
