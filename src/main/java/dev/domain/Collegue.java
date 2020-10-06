@@ -1,71 +1,94 @@
 package dev.domain;
 
-import javax.persistence.*;
 import java.util.List;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Collegue {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    private String nom;
+	private String nom;
 
-    private String prenom;
+	private String prenom;
 
-    private String email;
+	private String email;
 
-    private String motDePasse;
+	private String motDePasse;
 
-    @OneToMany(mappedBy = "collegue", cascade = CascadeType.PERSIST)
-    private List<RoleCollegue> roles;
-    
-    public Long getId() {
-        return id;
-    }
+	@OneToMany(mappedBy = "collegue", cascade = CascadeType.PERSIST)
+	private List<RoleCollegue> roles;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	@OneToMany(mappedBy = "collegue")
+	private List<Absence> ListeAbsencesDuCollegue;
 
-    public String getEmail() {
-        return email;
-    }
+	/**
+	 * @return the listeAbsencesDuCollegue
+	 */
+	public List<Absence> getListeAbsencesDuCollegue() {
+		return ListeAbsencesDuCollegue;
+	}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+	/**
+	 * @param listeAbsencesDuCollegue the listeAbsencesDuCollegue to set
+	 */
+	public void setListeAbsencesDuCollegue(List<Absence> listeAbsencesDuCollegue) {
+		ListeAbsencesDuCollegue = listeAbsencesDuCollegue;
+	}
 
-    public String getMotDePasse() {
-        return motDePasse;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setMotDePasse(String motDePasse) {
-        this.motDePasse = motDePasse;
-    }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-    public List<RoleCollegue> getRoles() {
-        return roles;
-    }
+	public String getEmail() {
+		return email;
+	}
 
-    public void setRoles(List<RoleCollegue> roles) {
-        this.roles = roles;
-    }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-    public String getNom() {
-        return nom;
-    }
+	public String getMotDePasse() {
+		return motDePasse;
+	}
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+	public void setMotDePasse(String motDePasse) {
+		this.motDePasse = motDePasse;
+	}
 
-    public String getPrenom() {
-        return prenom;
-    }
+	public List<RoleCollegue> getRoles() {
+		return roles;
+	}
 
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
+	public void setRoles(List<RoleCollegue> roles) {
+		this.roles = roles;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public String getPrenom() {
+		return prenom;
+	}
+
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
 }
