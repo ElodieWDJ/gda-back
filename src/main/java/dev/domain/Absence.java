@@ -23,7 +23,7 @@ public class Absence {
 	private LocalDate dateDernierJourAbsence;
 
 	@OneToMany
-	private List<JourAbsence> tabJourAbsence;
+	private List<JourAbsence> listeJourAbsence;
 
 	private String commentaireAbsence;
 
@@ -34,17 +34,8 @@ public class Absence {
 
 // CONSTRUCTEUR  ----------------------------------------------------------------------------------	
 
-	public Absence(Long id, LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence,
-			List<JourAbsence> tabJourAbsence, String commentaireAbsence, eStatutDemandeAbsence statutDemandeAbsence,
-			Collegue collegue) {
-		super();
-		this.id = id;
-		this.datePremierJourAbsence = datePremierJourAbsence;
-		this.dateDernierJourAbsence = dateDernierJourAbsence;
-		this.tabJourAbsence = tabJourAbsence;
-		this.commentaireAbsence = commentaireAbsence;
-		this.statutDemandeAbsence = statutDemandeAbsence;
-		this.collegue = collegue;
+	public Absence() {
+
 	}
 
 // GETTERS AND SETTERS  ----------------------------------------------------------------------------------	
@@ -73,12 +64,12 @@ public class Absence {
 		this.dateDernierJourAbsence = dateDernierJourAbsence;
 	}
 
-	public List<JourAbsence> getTabJourAbsence() {
-		return tabJourAbsence;
+	public List<JourAbsence> getListeJourAbsence() {
+		return listeJourAbsence;
 	}
 
-	public void setTabJourAbsence(List<JourAbsence> tabJourAbsence) {
-		this.tabJourAbsence = tabJourAbsence;
+	public void setListeJourAbsence(List<JourAbsence> listeJourAbsence) {
+		this.listeJourAbsence = listeJourAbsence;
 	}
 
 	public String getCommentaireAbsence() {

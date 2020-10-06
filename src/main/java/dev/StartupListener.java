@@ -1,6 +1,10 @@
 package dev;
 
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -8,11 +12,17 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import dev.domain.Absence;
 import dev.domain.Collegue;
+import dev.domain.JourAbsence;
 import dev.domain.RoleCollegue;
 import dev.domain.Version;
 import dev.domain.eRole;
+import dev.domain.eStatutDemandeAbsence;
+import dev.domain.eTypeJourAbsence;
+import dev.repository.AbsenceRepo;
 import dev.repository.CollegueRepo;
+import dev.repository.JourAbsenceRepo;
 import dev.repository.VersionRepo;
 
 /**
@@ -25,13 +35,19 @@ public class StartupListener {
 	private VersionRepo versionRepo;
 	private PasswordEncoder passwordEncoder;
 	private CollegueRepo collegueRepo;
+	private AbsenceRepo absenceRepo;
+	private JourAbsenceRepo jourAbsenceRepo;
 
 	public StartupListener(@Value("${app.version}") String appVersion, VersionRepo versionRepo,
-			PasswordEncoder passwordEncoder, CollegueRepo collegueRepo) {
+			PasswordEncoder passwordEncoder, CollegueRepo collegueRepo, AbsenceRepo absenceRepo,
+			JourAbsenceRepo jourAbsenceRepo) {
 		this.appVersion = appVersion;
 		this.versionRepo = versionRepo;
 		this.passwordEncoder = passwordEncoder;
 		this.collegueRepo = collegueRepo;
+		this.absenceRepo = absenceRepo;
+		this.jourAbsenceRepo = jourAbsenceRepo;
+
 	}
 
 	@EventListener(ContextRefreshedEvent.class)
@@ -80,10 +96,38 @@ public class StartupListener {
 		col5.setEmail("hugogaston@superApp.com");
 		col5.setMotDePasse(passwordEncoder.encode("superpass"));
 		col5.setRoles(Arrays.asList(new RoleCollegue(col5, eRole.ROLE_UTILISATEUR)));
+//		this.collegueRepo.save(col5);
+
+		// Test Absence
+		JourAbsence j1 = new JourAbsence();
+		j1.setTypeJourAbsence(eTypeJourAbsence.CONGE_PAYE);
+		j1.setDateDuJour(LocalDate.of(2020, Month.JANUARY, 1));
+		j1.setCommentaire("Test");
+		this.jourAbsenceRepo.save(j1);
+
+		JourAbsence j2 = new JourAbsence();
+		j2.setTypeJourAbsence(eTypeJourAbsence.CONGE_PAYE);
+		j2.setDateDuJour(LocalDate.of(2020, Month.JANUARY, 2));
+		j2.setCommentaire("Test");
+		this.jourAbsenceRepo.save(j2);
+
+		List<JourAbsence> listeTest = new ArrayList();
+		listeTest.add(j1);
+		listeTest.add(j2);
+
+		Absence absence1 = new Absence();
+		absence1.setDatePremierJourAbsence(LocalDate.of(2020, Month.JANUARY, 1));
+		absence1.setDateDernierJourAbsence(LocalDate.of(2020, Month.JANUARY, 2));
+		absence1.setListeJourAbsence(listeTest);
+		absence1.setCommentaireAbsence("Test absence");
+		absence1.setStatutDemandeAbsence(eStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
+
+		this.absenceRepo.save(absence1);
+
+		List<Absence> listeAbsence = new ArrayList();
+		listeAbsence.add(absence1);
+		col5.setListeAbsencesDuCollegue(listeAbsence);
 		this.collegueRepo.save(col5);
-
-		//
-
 	}
 
 }

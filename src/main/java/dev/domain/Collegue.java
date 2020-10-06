@@ -28,7 +28,21 @@ public class Collegue {
 	private List<RoleCollegue> roles;
 
 	@OneToMany(mappedBy = "collegue")
-	private List<Absence> absencesDuCollegue;
+	private List<Absence> ListeAbsencesDuCollegue;
+
+	/**
+	 * @return the listeAbsencesDuCollegue
+	 */
+	public List<Absence> getListeAbsencesDuCollegue() {
+		return ListeAbsencesDuCollegue;
+	}
+
+	/**
+	 * @param listeAbsencesDuCollegue the listeAbsencesDuCollegue to set
+	 */
+	public void setListeAbsencesDuCollegue(List<Absence> listeAbsencesDuCollegue) {
+		ListeAbsencesDuCollegue = listeAbsencesDuCollegue;
+	}
 
 	public Long getId() {
 		return id;
