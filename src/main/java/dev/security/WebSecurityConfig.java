@@ -75,13 +75,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						(request, response, authException) -> response.setStatus(HttpServletResponse.SC_FORBIDDEN))
 				.and()
 				// toutes les requêtes doivent être authentifiées
-				.authorizeRequests().anyRequest().authenticated().and()
+				.authorizeRequests() // toutes les requêtes doivent être authentifiées
+				.antMatchers("/h2-console/**").permitAll().anyRequest().authenticated().and()
 				// génération d'un formulaire de login
 				// il faut produire une requête avec les caractéristiques suivantes :
 				// POST /login
 				// 'Content-Type': 'application/x-www-form-urlencoded'
 				// Deux paramètres : username et password
-				.antMatcher("http://localhost:8080/h2-console/**").formLogin()
+				.formLogin()
 				// en cas de validation avec succès du formulaire
 				// jwtAuthenticationSuccessHandler personnalise la réponse à envoyer
 				// => la génération d'un jeton JWT
