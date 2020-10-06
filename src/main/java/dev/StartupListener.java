@@ -96,7 +96,7 @@ public class StartupListener {
 		col5.setEmail("hugogaston@superApp.com");
 		col5.setMotDePasse(passwordEncoder.encode("superpass"));
 		col5.setRoles(Arrays.asList(new RoleCollegue(col5, eRole.ROLE_UTILISATEUR)));
-//		this.collegueRepo.save(col5);
+		this.collegueRepo.save(col5);
 
 		// Test Absence
 		JourAbsence j1 = new JourAbsence();
@@ -121,7 +121,7 @@ public class StartupListener {
 		absence1.setListeJourAbsence(listeTest);
 		absence1.setCommentaireAbsence("Test absence");
 		absence1.setStatutDemandeAbsence(eStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
-
+		absence1.setCollegue(col5);
 		this.absenceRepo.save(absence1);
 
 		List<Absence> listeAbsence = new ArrayList();
