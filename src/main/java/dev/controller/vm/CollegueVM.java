@@ -15,13 +15,15 @@ public class CollegueVM {
     private String email;
     private String nom;
     private String prenom;
-    private List<eRole> roles = new ArrayList<>();
+
+    private List<String> roles = new ArrayList<>();
+
 
     public CollegueVM(Collegue col) {
         this.email = col.getEmail();
         this.nom = col.getNom();
         this.prenom = col.getPrenom();
-        this.roles = col.getRoles().stream().map(roleCollegue -> roleCollegue.getRole()).collect(Collectors.toList());
+        this.roles = col.getRoles().stream().map( roleCollegue -> String.valueOf(roleCollegue.getRole().getValue())).collect(Collectors.toList());
     }
 
     public String getEmail() {
@@ -48,11 +50,12 @@ public class CollegueVM {
         this.prenom = prenom;
     }
 
-    public List<eRole> getRoles() {
+
+    public List<String> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<eRole> roles) {
+    public void setRoles(List<String> roles) {
         this.roles = roles;
     }
 }
