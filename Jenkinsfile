@@ -19,6 +19,7 @@ pipeline {
                   sh "git checkout ${GIT_BRANCH}"
                   sh "git pull"
                   sh "git push --force ${PROD_GIT} ${GIT_BRANCH}:master"
+                  discordSend description: "${BUILD_URL}", footer: 'Succès', image: '', link: '', result: 'SUCCESS', thumbnail: '', title: "Déploiement en cours chez Clever Cloud ! ${env.JOB_NAME} commit ${env.GIT_COMMIT}", webhookURL: "${DISCORD_WEBHOOK_URL}"
                   slackSend channel: '#jenkins_nantes', color: 'good', message: "Déploiement en cours chez Clever Cloud ! ${env.JOB_NAME} commit ${env.GIT_COMMIT}"
                }
             }
@@ -26,9 +27,12 @@ pipeline {
     }
     post {
         success {
+           discordSend description: "${BUILD_URL}", footer: 'Succès', image: '', link: '', result: 'SUCCESS', thumbnail: '', title: "Succès ! ${env.JOB_NAME} commit ${env.GIT_COMMIT}", webhookURL: "${DISCORD_WEBHOOK_URL}"
            slackSend channel: '#jenkins_nantes', color: 'good', message: "Succès ! ${env.JOB_NAME} commit ${env.GIT_COMMIT} (<${env.BUILD_URL}|Open>)"
         }
         failure {
+           discordSend description: "${BUILD_URL}", footer: 'Échec', image: '', link: '', result: 'FAILURE', thumbnail: '', title: "Oops ! ${env.JOB_NAME} commit ${env.GIT_COMMIT}", webhookURL: "${DISCORD_WEBHOOK_URL}"
+
            slackSend channel: '#jenkins_nantes', color: 'danger', message: "Oops ! ${env.JOB_NAME} commit ${env.GIT_COMMIT} (<${env.BUILD_URL}|Open>)"
         }
     }
