@@ -10,20 +10,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.Absence;
 import dev.domain.exceptions.CollegueIntrouvableException;
-import dev.domain.services.AbsenceService;
+import dev.domain.services.CollegueService;
 
 @RestController
 @RequestMapping("gestion/absences")
 public class AbsenceController {
-	private AbsenceService absenceService;
+	private CollegueService collegueService;
 
-	public AbsenceController(AbsenceService absenceService) {
-		this.absenceService = absenceService;
+	public AbsenceController(CollegueService collegueService) {
+		this.collegueService = collegueService;
 	}
 
 	@GetMapping("/all")
 	public ResponseEntity<?> listerAbsencesAllCollegues(@PathVariable Long id) throws CollegueIntrouvableException {
-		List<Absence> absences = this.absenceService.getAllAbsences();
+		List<Absence> absences = this.collegueService.getAllAbsences(id);
 		if (absences.size() != 0) {
 			return ResponseEntity.ok(absences);
 		} else {
@@ -31,14 +31,5 @@ public class AbsenceController {
 		}
 	}
 
-	@GetMapping("/all/{idUtilisateur}")
-	public ResponseEntity<?> listeAbsencesParUtilisateur(@PathVariable Long id) throws CollegueIntrouvableException {
-		List<Absence> absences = this.absenceService.getAbsencesByCollegue(id);
-		if (absences.size() != 0) {
-			return ResponseEntity.ok(absences);
-		} else {
-			return ResponseEntity.ok("Aucune absence trouvée pour l'utilisateur id =" + id);
-		}
-	}
 
 }
