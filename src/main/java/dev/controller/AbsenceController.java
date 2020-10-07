@@ -13,7 +13,7 @@ import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.CollegueService;
 
 @RestController
-@RequestMapping("gestion/absences")
+@RequestMapping("gestion/collegue")
 public class AbsenceController {
 	private CollegueService collegueService;
 
@@ -21,7 +21,7 @@ public class AbsenceController {
 		this.collegueService = collegueService;
 	}
 
-	@GetMapping("/all")
+	@GetMapping("absences/all")
 	public ResponseEntity<?> listerAbsencesAllCollegues(@PathVariable Long id) throws CollegueIntrouvableException {
 		List<Absence> absences = this.collegueService.getAllAbsences(id);
 		if (absences.size() != 0) {
