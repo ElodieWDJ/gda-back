@@ -60,7 +60,6 @@ public class AbsenceController {
 																		   EStatutDemandeAbsence.INITIALE, 
 																		   collegueCreantAbsence)
 															  );
-			
 			return ResponseEntity.ok().body(absence);
 		} else {
 			return ResponseEntity.badRequest().body("Un problème est survenu");

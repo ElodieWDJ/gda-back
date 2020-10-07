@@ -29,6 +29,8 @@ public class Collegue {
 
 	@OneToMany(mappedBy = "collegue")
 	private List<Absence> ListeAbsencesDuCollegue;
+	
+	private Integer soldesVacances = 60;
 
 	/**
 	 * @return the listeAbsencesDuCollegue
@@ -91,4 +93,14 @@ public class Collegue {
 	public void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
+
+	public Integer getSoldesVacances() {
+		return soldesVacances;
+	}
+
+	public void setSoldesVacances(Integer soldesVacances) {
+		this.soldesVacances = soldesVacances;
+	}
+	
+	
 }
