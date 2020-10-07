@@ -16,18 +16,29 @@ import dev.domain.services.AbsenceService;
 @RequestMapping("gestion/absences")
 public class AbsenceController {
 	private AbsenceService absenceService;
-	
+
 	public AbsenceController(AbsenceService absenceService) {
 		this.absenceService = absenceService;
 	}
-	
-	@GetMapping("/all/{idUtilisateur}")
-	public ResponseEntity<?> listeAbsencesParUtilisateur(@PathVariable Long id) throws CollegueIntrouvableException {
-		List<Absence> absences = this.absenceService.getAbsencesByCollegue(id);
-		if(absences.size() != 0) {
+
+	@GetMapping("/all")
+	public ResponseEntity<?> listerAbsencesAllCollegues(@PathVariable Long id) throws CollegueIntrouvableException {
+		List<Absence> absences = this.absenceService.getAllAbsences();
+		if (absences.size() != 0) {
 			return ResponseEntity.ok(absences);
 		} else {
 			return ResponseEntity.ok("Aucune absence");
 		}
 	}
+
+	@GetMapping("/all/{idUtilisateur}")
+	public ResponseEntity<?> listeAbsencesParUtilisateur(@PathVariable Long id) throws CollegueIntrouvableException {
+		List<Absence> absences = this.absenceService.getAbsencesByCollegue(id);
+		if (absences.size() != 0) {
+			return ResponseEntity.ok(absences);
+		} else {
+			return ResponseEntity.ok("Aucune absence trouvée pour l'utilisateur id =" + id);
+		}
+	}
+
 }
