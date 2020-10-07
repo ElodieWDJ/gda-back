@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Structure modèlisant un collègue servant à communiquer avec l'extérieur (WEB API).
  */
 public class CollegueVM {
-
+	private Long id;
     private String email;
     private String nom;
     private String prenom;
@@ -20,6 +20,7 @@ public class CollegueVM {
 
 
     public CollegueVM(Collegue col) {
+    	this.id = col.getId();
         this.email = col.getEmail();
         this.nom = col.getNom();
         this.prenom = col.getPrenom();
@@ -58,4 +59,15 @@ public class CollegueVM {
     public void setRoles(List<String> roles) {
         this.roles = roles;
     }
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+    
+    
+    
 }
