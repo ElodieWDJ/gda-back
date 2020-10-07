@@ -118,7 +118,7 @@ public class StartupListener {
 		Absence absence1 = new Absence();
 		absence1.setDatePremierJourAbsence(LocalDate.of(2020, Month.JANUARY, 1));
 		absence1.setDateDernierJourAbsence(LocalDate.of(2020, Month.JANUARY, 2));
-		absence1.setListeJourAbsence(listeTest);
+		//absence1.setListeJourAbsence(listeTest);
 		absence1.setCommentaireAbsence("Test absence");
 		absence1.setStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
 		absence1.setCollegue(col5);

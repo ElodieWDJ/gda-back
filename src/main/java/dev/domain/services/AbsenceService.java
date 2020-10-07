@@ -8,15 +8,18 @@ import org.springframework.stereotype.Service;
 import dev.domain.Absence;
 import dev.domain.Collegue;
 import dev.domain.exceptions.CollegueIntrouvableException;
+import dev.repository.AbsenceRepo;
 import dev.repository.CollegueRepo;
 
 @Service
 public class AbsenceService {
-	private CollegueRepo collegueRepo;
+	private AbsenceRepo absenceRepo;
 	
-	public AbsenceService(CollegueRepo collegueRepo) {
-		this.collegueRepo = collegueRepo;
+	public AbsenceService(AbsenceRepo absenceRepo) {
+		this.absenceRepo = absenceRepo;
 	}
 
-	
+	public Absence creerAbsence(Absence absence) {
+		return this.absenceRepo.save(absence);
+	}
 }

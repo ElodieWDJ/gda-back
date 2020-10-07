@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,12 +23,16 @@ public class Absence {
 	private LocalDate datePremierJourAbsence;
 
 	private LocalDate dateDernierJourAbsence;
-
-	@OneToMany
-	private List<JourAbsence> listeJourAbsence;
+	
+	@Enumerated(EnumType.STRING)
+	private ETypeJourAbsence typeConge;
+	
+//	@OneToMany
+//	private List<JourAbsence> listeJourAbsence;
 
 	private String commentaireAbsence;
-
+	
+	@Enumerated(EnumType.STRING)
 	private EStatutDemandeAbsence statutDemandeAbsence;
 
 	@ManyToOne
@@ -34,9 +40,19 @@ public class Absence {
 	private Collegue collegue;
 
 // CONSTRUCTEUR  ----------------------------------------------------------------------------------	
-
+	
 	public Absence() {
 
+	}
+
+	public Absence(LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence, ETypeJourAbsence typeConge,
+			String commentaireAbsence, EStatutDemandeAbsence statutDemandeAbsence, Collegue collegue) {
+		this.datePremierJourAbsence = datePremierJourAbsence;
+		this.dateDernierJourAbsence = dateDernierJourAbsence;
+		this.typeConge = typeConge;
+		this.commentaireAbsence = commentaireAbsence;
+		this.statutDemandeAbsence = statutDemandeAbsence;
+		this.collegue = collegue;
 	}
 
 // GETTERS AND SETTERS  ----------------------------------------------------------------------------------	
@@ -64,13 +80,22 @@ public class Absence {
 	public void setDateDernierJourAbsence(LocalDate dateDernierJourAbsence) {
 		this.dateDernierJourAbsence = dateDernierJourAbsence;
 	}
+	
+	
+//	public List<JourAbsence> getListeJourAbsence() {
+//		return listeJourAbsence;
+//	}
+//
+//	public void setListeJourAbsence(List<JourAbsence> listeJourAbsence) {
+//		this.listeJourAbsence = listeJourAbsence;
+//	}
 
-	public List<JourAbsence> getListeJourAbsence() {
-		return listeJourAbsence;
+	public ETypeJourAbsence getTypeConge() {
+		return typeConge;
 	}
 
-	public void setListeJourAbsence(List<JourAbsence> listeJourAbsence) {
-		this.listeJourAbsence = listeJourAbsence;
+	public void setTypeConge(ETypeJourAbsence typeConge) {
+		this.typeConge = typeConge;
 	}
 
 	public String getCommentaireAbsence() {
