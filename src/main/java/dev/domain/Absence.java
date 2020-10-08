@@ -1,7 +1,6 @@
 package dev.domain;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Absence {
@@ -23,15 +21,15 @@ public class Absence {
 	private LocalDate datePremierJourAbsence;
 
 	private LocalDate dateDernierJourAbsence;
-	
+
 	@Enumerated(EnumType.STRING)
 	private ETypeJourAbsence typeConge;
-	
+
 //	@OneToMany
 //	private List<JourAbsence> listeJourAbsence;
 
 	private String commentaireAbsence;
-	
+
 	@Enumerated(EnumType.STRING)
 	private EStatutDemandeAbsence statutDemandeAbsence;
 
@@ -40,7 +38,7 @@ public class Absence {
 	private Collegue collegue;
 
 // CONSTRUCTEUR  ----------------------------------------------------------------------------------	
-	
+
 	public Absence() {
 
 	}
@@ -80,8 +78,7 @@ public class Absence {
 	public void setDateDernierJourAbsence(LocalDate dateDernierJourAbsence) {
 		this.dateDernierJourAbsence = dateDernierJourAbsence;
 	}
-	
-	
+
 //	public List<JourAbsence> getListeJourAbsence() {
 //		return listeJourAbsence;
 //	}
@@ -120,6 +117,13 @@ public class Absence {
 
 	public void setCollegue(Collegue collegue) {
 		this.collegue = collegue;
+	}
+
+	@Override
+	public String toString() {
+		return "Absence [id=" + id + ", datePremierJourAbsence=" + datePremierJourAbsence + ", dateDernierJourAbsence="
+				+ dateDernierJourAbsence + ", typeConge=" + typeConge + ", commentaireAbsence=" + commentaireAbsence
+				+ ", statutDemandeAbsence=" + statutDemandeAbsence + ", collegue=" + collegue + "]";
 	}
 
 }

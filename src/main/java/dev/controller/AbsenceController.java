@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,22 +48,22 @@ public class AbsenceController {
 	}
 
 	@PostMapping("absence/create")
-	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid) throws CollegueIntrouvableException {
-		if(!resValid.hasErrors()) {
-			LocalDate dateDebutToLocalData = Instant.ofEpochMilli(dtoRequest.getDateDebut().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
-			LocalDate dateFinToLocalData = Instant.ofEpochMilli(dtoRequest.getDateFin().getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid)
+			throws CollegueIntrouvableException {
+		if (!resValid.hasErrors()) {
+			LocalDate dateDebutToLocalData = Instant.ofEpochMilli(dtoRequest.getDateDebut().getTime())
+					.atZone(ZoneId.systemDefault()).toLocalDate();
+			LocalDate dateFinToLocalData = Instant.ofEpochMilli(dtoRequest.getDateFin().getTime())
+					.atZone(ZoneId.systemDefault()).toLocalDate();
 			Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdUtilisateur());
-			
-			Absence absence = this.absenceService.creerAbsence(new Absence(dateDebutToLocalData, 
-																		   dateFinToLocalData, 
-																		   ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), 
-																		   dtoRequest.getMotif(), 
-																		   EStatutDemandeAbsence.INITIALE, 
-																		   collegueCreantAbsence)
-															  );
-			return ResponseEntity.ok().body(absence);
+
+			Absence absence = this.absenceService.creerAbsence(new Absence(dateDebutToLocalData, dateFinToLocalData,
+					ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getMotif(),
+					EStatutDemandeAbsence.INITIALE, collegueCreantAbsence));
+
+			return ResponseEntity.status(HttpStatus.OK).body("Absence insérée en BDD");
 		} else {
-			return ResponseEntity.badRequest().body("Un problème est survenu");
+			return ResponseEntity.badRequest().body("Problème survenu lors du Post");
 		}
 	}
 }
