@@ -1,4 +1,4 @@
-package dev.domain;
+package dev.domain.entite;
 
 import java.time.LocalDate;
 
@@ -24,9 +24,6 @@ public class Absence {
 
 	@Enumerated(EnumType.STRING)
 	private ETypeJourAbsence typeConge;
-
-//	@OneToMany
-//	private List<JourAbsence> listeJourAbsence;
 
 	private String commentaireAbsence;
 

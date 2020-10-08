@@ -1,25 +1,26 @@
 package dev.domain.dto;
 
-import java.util.Date;
+import java.time.LocalDate;
 
-public class DtoCreerAbsenceRequest {
+import dev.domain.entite.Absence;
+
+public class DtoAbsenceResponse {
 
 	long idCollegue;
-	Date datePremierJourAbsence;
-	Date dateDernierJourAbsence;
+	LocalDate datePremierJourAbsence;
+	LocalDate dateDernierJourAbsence;
 	String typeConge;
 	String commentaireAbsence;
 	String statutDemande;
 
-	public DtoCreerAbsenceRequest(long idCollegue, Date datePremierJourAbsence, Date dateDernierJourAbsence,
-			String typeConge, String commentaireAbsence, String statutDemande) {
-		super();
-		this.idCollegue = idCollegue;
-		this.datePremierJourAbsence = datePremierJourAbsence;
-		this.dateDernierJourAbsence = dateDernierJourAbsence;
-		this.typeConge = typeConge;
-		this.commentaireAbsence = commentaireAbsence;
-		this.statutDemande = statutDemande;
+	public DtoAbsenceResponse(Absence abs) {
+		this.idCollegue = abs.getCollegue().getId();
+		this.datePremierJourAbsence = abs.getDatePremierJourAbsence();
+		this.dateDernierJourAbsence = abs.getDateDernierJourAbsence();
+		// this.typeConge = abs.getTypeConge().toString();
+		this.typeConge = "test type";
+		this.commentaireAbsence = abs.getCommentaireAbsence();
+		this.statutDemande = abs.getStatutDemandeAbsence().toString();
 	}
 
 	public long getIdCollegue() {
@@ -30,19 +31,19 @@ public class DtoCreerAbsenceRequest {
 		this.idCollegue = idCollegue;
 	}
 
-	public Date getDatePremierJourAbsence() {
+	public LocalDate getDatePremierJourAbsence() {
 		return datePremierJourAbsence;
 	}
 
-	public void setDatePremierJourAbsence(Date datePremierJourAbsence) {
+	public void setDatePremierJourAbsence(LocalDate datePremierJourAbsence) {
 		this.datePremierJourAbsence = datePremierJourAbsence;
 	}
 
-	public Date getDateDernierJourAbsence() {
+	public LocalDate getDateDernierJourAbsence() {
 		return dateDernierJourAbsence;
 	}
 
-	public void setDateDernierJourAbsence(Date dateDernierJourAbsence) {
+	public void setDateDernierJourAbsence(LocalDate dateDernierJourAbsence) {
 		this.dateDernierJourAbsence = dateDernierJourAbsence;
 	}
 

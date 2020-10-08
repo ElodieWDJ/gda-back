@@ -1,4 +1,4 @@
-package dev.domain;
+package dev.domain.entite;
 
 import java.time.LocalDate;
 
