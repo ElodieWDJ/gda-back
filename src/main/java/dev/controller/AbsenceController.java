@@ -21,10 +21,12 @@ import dev.domain.Absence;
 import dev.domain.Collegue;
 import dev.domain.EStatutDemandeAbsence;
 import dev.domain.ETypeJourAbsence;
+import dev.domain.dto.DtoAbsenceExistanteResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
+import dev.utils.ConverterDate;
 
 @RestController
 @RequestMapping("gestion/collegue")
@@ -51,17 +53,22 @@ public class AbsenceController {
 	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid)
 			throws CollegueIntrouvableException {
 		if (!resValid.hasErrors()) {
-			LocalDate dateDebutToLocalData = Instant.ofEpochMilli(dtoRequest.getDateDebut().getTime())
-					.atZone(ZoneId.systemDefault()).toLocalDate();
-			LocalDate dateFinToLocalData = Instant.ofEpochMilli(dtoRequest.getDateFin().getTime())
-					.atZone(ZoneId.systemDefault()).toLocalDate();
-			Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdUtilisateur());
-
-			Absence absence = this.absenceService.creerAbsence(new Absence(dateDebutToLocalData, dateFinToLocalData,
-					ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getMotif(),
-					EStatutDemandeAbsence.INITIALE, collegueCreantAbsence));
-
-			return ResponseEntity.status(HttpStatus.OK).body("Absence insérée en BDD");
+				LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDateDebut());
+				LocalDate dateFinToLocalData =  ConverterDate.convertDateToLocalDate(dtoRequest.getDateFin());
+				Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdUtilisateur());
+				
+				if(this.absenceService.controleChevaucheDate(dateDebutToLocalData, dateFinToLocalData, collegueCreantAbsence)) {
+					
+					Absence absence = this.absenceService.creerAbsence(new Absence(dateDebutToLocalData, dateFinToLocalData,
+							ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getMotif(),
+							EStatutDemandeAbsence.INITIALE, collegueCreantAbsence));
+					
+					return ResponseEntity.status(HttpStatus.OK).body("Absence insérée en BDD");
+				
+			} else {
+				String message = "L'abscence existe déjà aux dates :";
+				return ResponseEntity.badRequest().body(new DtoAbsenceExistanteResponse(message, dtoRequest.getDateDebut(), dtoRequest.getDateFin()));
+			}
 		} else {
 			return ResponseEntity.badRequest().body("Problème survenu lors du Post");
 		}
