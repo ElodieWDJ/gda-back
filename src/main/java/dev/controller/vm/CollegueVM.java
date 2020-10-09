@@ -19,6 +19,7 @@ public class CollegueVM {
     private List<String> roles = new ArrayList<>();
 
 
+    
     public CollegueVM(Collegue col) {
     	this.id = col.getId();
         this.email = col.getEmail();
