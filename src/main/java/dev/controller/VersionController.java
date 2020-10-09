@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.domain.Version;
+import dev.domain.entite.Version;
 import dev.repository.VersionRepo;
 
 /**
