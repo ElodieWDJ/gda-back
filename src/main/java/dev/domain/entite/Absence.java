@@ -1,4 +1,4 @@
-package dev.domain;
+package dev.domain.entite;
 
 import java.time.LocalDate;
 
@@ -25,16 +25,12 @@ public class Absence {
 	@Enumerated(EnumType.STRING)
 	private ETypeJourAbsence typeConge;
 
-//	@OneToMany
-//	private List<JourAbsence> listeJourAbsence;
-
 	private String commentaireAbsence;
 
 	@Enumerated(EnumType.STRING)
 	private EStatutDemandeAbsence statutDemandeAbsence;
 
 	@ManyToOne
-//	@JoinColumn(name = "COLLEGUE_ID")
 	private Collegue collegue;
 
 // CONSTRUCTEUR  ----------------------------------------------------------------------------------	
