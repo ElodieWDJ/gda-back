@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -55,7 +56,25 @@ public class AbsenceController {
 			return ResponseEntity.ok("Aucune absence enregistrée");
 		}
 	}
+	
+	@GetMapping("visualisation/user/{id}")
+	public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
+		List<Absence> absences = this.absenceService.getAbsencesByUser(id);
+		
+		List<DtoAbsenceResponse> listeAbsenceDto = new ArrayList<DtoAbsenceResponse>();
+		
+		for (Absence abs : absences) {
+			listeAbsenceDto.add(new DtoAbsenceResponse(abs));
+		}
 
+		if (absences.size() != 0) {
+			return ResponseEntity.ok(listeAbsenceDto);
+		} else {
+			return ResponseEntity.ok("Aucune absence enregistrée");
+		}
+	}
+	
+	
 	@PostMapping("create")
 	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid)
 			throws CollegueIntrouvableException {
@@ -77,4 +96,6 @@ public class AbsenceController {
 			return ResponseEntity.badRequest().body("Problème survenu lors du Post");
 		}
 	}
+	
+	
 }
