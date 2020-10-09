@@ -31,4 +31,14 @@ public class CollegueService {
 			throw new CollegueIntrouvableException("L'id ne correspond à aucun collegue. ID introuvable = " + id);
 		}
 	}
+
+	public Integer recupererSoldeTotal(Long id) throws CollegueIntrouvableException {
+		Optional<Collegue> collegue = this.collegueRepo.findById(id);
+		if (collegue.isPresent()) {
+			return collegue.get().getSoldesVacances();
+		} else {
+			throw new CollegueIntrouvableException("L'id ne correspond à aucun collegue. ID introuvable = " + id);
+		}
+
+	}
 }
