@@ -31,7 +31,6 @@ public class Absence {
 	private EStatutDemandeAbsence statutDemandeAbsence;
 
 	@ManyToOne
-//	@JoinColumn(name = "COLLEGUE_ID")
 	private Collegue collegue;
 
 // CONSTRUCTEUR  ----------------------------------------------------------------------------------	
