@@ -9,14 +9,18 @@ import org.springframework.stereotype.Service;
 import dev.domain.Absence;
 import dev.domain.Collegue;
 import dev.domain.EStatutDemandeAbsence;
+import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.repository.AbsenceRepo;
+import dev.repository.CollegueRepo;
 
 @Service
 public class AbsenceService {
 	private AbsenceRepo absenceRepo;
+	private CollegueRepo collegueRepo;
 	
-	public AbsenceService(AbsenceRepo absenceRepo) {
+	public AbsenceService(AbsenceRepo absenceRepo, CollegueRepo collegueRepo) {
 		this.absenceRepo = absenceRepo;
+		this.collegueRepo = collegueRepo;
 	}
 
 	public Absence creerAbsence(Absence absence) {
@@ -52,4 +56,19 @@ public class AbsenceService {
 	private boolean checkerStatusAbsence(Absence absence) {
 		return absence.getStatutDemandeAbsence().equals(EStatutDemandeAbsence.REJETEE) ? true : false;
 	}
+	
+	public List<Absence> getAbsencesByUser(Long id) throws CollegueIntrouvableException {
+
+        Optional<Collegue> collegue = collegueRepo.findById(id);
+
+        if (collegue.isPresent()) {
+            Collegue col = collegue.get();
+
+            return col.getListeAbsencesDuCollegue();
+
+        } else {
+            throw new CollegueIntrouvableException("Pas de collègue correspondant à cet Id.");
+        }
+
+    }
 }
