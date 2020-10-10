@@ -3,6 +3,7 @@ package dev.controller;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -22,8 +23,8 @@ import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
-import dev.domain.entite.EStatutDemandeAbsence;
-import dev.domain.entite.ETypeJourAbsence;
+import dev.domain.enums.EStatutDemandeAbsence;
+import dev.domain.enums.ETypeJourAbsence;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
@@ -45,41 +46,26 @@ public class AbsenceController {
 	@GetMapping("visualisation/user/{id}")
     public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
         List<Absence> absences = this.absenceService.getAbsencesByUser(id);
-        List<DtoAbsenceResponse> listeAbsenceDto = new ArrayList<DtoAbsenceResponse>();
-        for (Absence abs : absences) {
-            listeAbsenceDto.add(new DtoAbsenceResponse(abs));
-        }
-
-        if (absences.size() != 0) {
-            return ResponseEntity.ok(listeAbsenceDto);
-        } else {
-            return ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
-        }
+        List<DtoAbsenceResponse> listeAbsenceDto = absences.stream().map(abs -> new DtoAbsenceResponse(abs)).collect(Collectors.toList());
+        
+        return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto) : ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
+        
     }
 
 	@GetMapping("all")
 	public ResponseEntity<?> listerAllAbsences() throws CollegueIntrouvableException {
 		List<Absence> absences = this.absenceService.getAllAbsence();
+		List<DtoAbsenceResponse> listeAbsenceDto = absences.stream().map(abs -> new DtoAbsenceResponse(abs)).collect(Collectors.toList());
 
-		List<DtoAbsenceResponse> listeAbsenceDto = new ArrayList<DtoAbsenceResponse>();
-
-		for (Absence abs : absences) {
-			listeAbsenceDto.add(new DtoAbsenceResponse(abs));
-		}
-
-		if (absences.size() != 0) {
-			return ResponseEntity.ok(listeAbsenceDto);
-		} else {
-			return ResponseEntity.ok("Aucune absence enregistrée");
-		}
+		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto) : ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
 	}
 
 	
 	@PostMapping("create")
 	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid)
 			throws CollegueIntrouvableException {
+		
 		if (!resValid.hasErrors()) {
-
 				LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
 				LocalDate dateFinToLocalData =  ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
 				Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdCollegue());

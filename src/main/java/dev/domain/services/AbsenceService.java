@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
-import dev.domain.entite.EStatutDemandeAbsence;
+import dev.domain.enums.EStatutDemandeAbsence;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.repository.AbsenceRepo;
 import dev.repository.CollegueRepo;
@@ -71,9 +71,8 @@ public class AbsenceService {
 
 		if (collegue.isPresent()) {
 			Collegue col = collegue.get();
-
 			return col.getListeAbsencesDuCollegue();
-
+			
 		} else {
 			throw new CollegueIntrouvableException("Pas de collègue correspondant à cet Id.");
 		}

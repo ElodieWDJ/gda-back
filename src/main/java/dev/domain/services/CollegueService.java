@@ -25,6 +25,7 @@ public class CollegueService {
 
 	public Collegue recupererCollegue(Long id) throws CollegueIntrouvableException {
 		Optional<Collegue> collegue = this.collegueRepo.findById(id);
+		
 		if (collegue.isPresent()) {
 			return collegue.get();
 		} else {
