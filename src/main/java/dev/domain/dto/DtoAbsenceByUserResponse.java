@@ -1,33 +1,25 @@
 package dev.domain.dto;
 
 import java.time.LocalDate;
+
 import dev.domain.entite.Absence;
 
-public class DtoAbsenceResponse {
 
-	long idCollegue;
+public class DtoAbsenceByUserResponse {
+
 	LocalDate datePremierJourAbsence;
 	LocalDate dateDernierJourAbsence;
 	String typeConge;
 	String commentaireAbsence;
 	String statutDemande;
-
-	public DtoAbsenceResponse(Absence abs) {
-		this.idCollegue = abs.getCollegue().getId();
-		this.datePremierJourAbsence = abs.getDatePremierJourAbsence();
-		this.dateDernierJourAbsence = abs.getDateDernierJourAbsence();
-		this.typeConge = abs.getTypeConge().toString();
-		// this.typeConge = "test type";
-		this.commentaireAbsence = abs.getCommentaireAbsence();
-		this.statutDemande = abs.getStatutDemandeAbsence().toString();
-	}
-
-	public long getIdCollegue() {
-		return idCollegue;
-	}
-
-	public void setIdCollegue(long idCollegue) {
-		this.idCollegue = idCollegue;
+	
+	public DtoAbsenceByUserResponse(Absence absence) {
+	
+		this.datePremierJourAbsence = absence.getDatePremierJourAbsence();
+		this.dateDernierJourAbsence = absence.getDateDernierJourAbsence();
+		this.typeConge = absence.getTypeConge().toString();
+		this.commentaireAbsence = absence.getCommentaireAbsence();
+		this.statutDemande = absence.getStatutDemandeAbsence().toString();
 	}
 
 	public LocalDate getDatePremierJourAbsence() {
@@ -69,6 +61,6 @@ public class DtoAbsenceResponse {
 	public void setStatutDemande(String statutDemande) {
 		this.statutDemande = statutDemande;
 	}
-
+	
+	
 }
-

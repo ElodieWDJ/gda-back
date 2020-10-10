@@ -2,11 +2,6 @@ package dev.domain.dto;
 
 import java.time.LocalDate;
 
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-
-import dev.domain.ETypeJourAbsence;
-
 public class DtoListeAbsenceResponse {
 	private LocalDate datePremierJourAbsence;
 	private LocalDate dateDernierJourAbsence;

@@ -2,52 +2,48 @@ package dev.domain.dto;
 
 import java.util.Date;
 
-import dev.domain.EStatutDemandeAbsence;
-import dev.domain.ETypeJourAbsence;
-
 public class DtoCreerAbsenceRequest {
-	private Long idUtilisateur;
-    private Date dateDebut;
-    private Date dateFin;
-    private String typeConge;
-    private String motif;
-    private String status;
-    
-	public DtoCreerAbsenceRequest(Long idUtilisateur, Date dateDebut, Date dateFin, String typeConge, String motif,
-			String status) {
-		this.idUtilisateur = idUtilisateur;
-		this.dateDebut = dateDebut;
-		this.dateFin = dateFin;
+
+	long idCollegue;
+	Date datePremierJourAbsence;
+	Date dateDernierJourAbsence;
+	String typeConge;
+	String commentaireAbsence;
+	String statutDemande;
+
+	public DtoCreerAbsenceRequest(long idCollegue, Date datePremierJourAbsence, Date dateDernierJourAbsence,
+			String typeConge, String commentaireAbsence, String statutDemande) {
+		super();
+		this.idCollegue = idCollegue;
+		this.datePremierJourAbsence = datePremierJourAbsence;
+		this.dateDernierJourAbsence = dateDernierJourAbsence;
 		this.typeConge = typeConge;
-		this.motif = motif;
-		this.status = status;
-	}
-	
-	
-	public Long getIdUtilisateur() {
-		return idUtilisateur;
+		this.commentaireAbsence = commentaireAbsence;
+		this.statutDemande = statutDemande;
 	}
 
-
-	public void setIdUtilisateur(Long idUtilisateur) {
-		this.idUtilisateur = idUtilisateur;
+	public long getIdCollegue() {
+		return idCollegue;
 	}
 
-
-	public Date getDateDebut() {
-		return dateDebut;
+	public void setIdCollegue(long idCollegue) {
+		this.idCollegue = idCollegue;
 	}
 
-	public void setDateDebut(Date dateDebut) {
-		this.dateDebut = dateDebut;
+	public Date getDatePremierJourAbsence() {
+		return datePremierJourAbsence;
 	}
 
-	public Date getDateFin() {
-		return dateFin;
+	public void setDatePremierJourAbsence(Date datePremierJourAbsence) {
+		this.datePremierJourAbsence = datePremierJourAbsence;
 	}
 
-	public void setDateFin(Date dateFin) {
-		this.dateFin = dateFin;
+	public Date getDateDernierJourAbsence() {
+		return dateDernierJourAbsence;
+	}
+
+	public void setDateDernierJourAbsence(Date dateDernierJourAbsence) {
+		this.dateDernierJourAbsence = dateDernierJourAbsence;
 	}
 
 	public String getTypeConge() {
@@ -58,22 +54,20 @@ public class DtoCreerAbsenceRequest {
 		this.typeConge = typeConge;
 	}
 
-	public String getMotif() {
-		return motif;
+	public String getCommentaireAbsence() {
+		return commentaireAbsence;
 	}
 
-	public void setMotif(String motif) {
-		this.motif = motif;
+	public void setCommentaireAbsence(String commentaireAbsence) {
+		this.commentaireAbsence = commentaireAbsence;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getStatutDemande() {
+		return statutDemande;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatutDemande(String statutDemande) {
+		this.statutDemande = statutDemande;
 	}
-    
-    
 
 }

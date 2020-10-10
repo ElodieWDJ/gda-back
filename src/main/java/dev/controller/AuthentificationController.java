@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthentificationController {
     private CollegueRepo collegueRepo;
 
+    private int id; 
+    
     public AuthentificationController(CollegueRepo collegueRepo) {
         this.collegueRepo = collegueRepo;
     }
