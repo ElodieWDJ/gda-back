@@ -70,7 +70,8 @@ public class AbsenceController {
 
 		if (!resValid.hasErrors()) {
 
-			LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
+			LocalDate dateDebutToLocalData = ConverterDate
+					.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
 			LocalDate dateFinToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
 			Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdCollegue());
 
@@ -96,12 +97,14 @@ public class AbsenceController {
 
 	@PutMapping
 	public ResponseEntity<?> editAbsence(@RequestBody DtoCreerAbsenceRequest dtoAbsenceRequest) {
-		LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoAbsenceRequest.getDatePremierJourAbsence());
-		LocalDate dateFinToLocalData = ConverterDate.convertDateToLocalDate(dtoAbsenceRequest.getDateDernierJourAbsence());
+		LocalDate dateDebutToLocalData = ConverterDate
+				.convertDateToLocalDate(DtoAbsenceRequest.getDatePremierJourAbsence());
+		LocalDate dateFinToLocalData = ConverterDate
+				.convertDateToLocalDate(DtoUpdateAbsenceRequest.getDateDernierJourAbsence());
 		Absence editAbsence = absenceService.updateAbsence(dtoAbsenceRequest.getIdCollegue(),
-															dateDebutToLocalData, dateFinToLocalData,
-														   ETypeJourAbsence.valueOf(dtoAbsenceRequest.getTypeConge()), dtoAbsenceRequest.getCommentaireAbsence(),
-														   EStatutDemandeAbsence.valueOf(dtoAbsenceRequest.getStatutDemande()));
+				dtoAbsenceRequest.getDatePremierJourAbsence(), dtoAbsenceRequest.getDateDernierJourAbsence(),
+				dtoAbsenceRequest.getTypeConge(), dtoAbsenceRequest.getCommentaireAbsence(),
+				dtoAbsenceRequest.getStatutDemande());
 		return ResponseEntity.ok(new DtoAbsenceResponse(editAbsence));
 	}
 

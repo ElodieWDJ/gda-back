@@ -5,8 +5,8 @@ import java.util.Date;
 public class DtoUpdateAbsenceRequest {
 
 	long idCollegue;
-	Date datePremierJourAbsence;
-	Date dateDernierJourAbsence;
+	static Date datePremierJourAbsence;
+	static Date dateDernierJourAbsence;
 	String typeConge;
 	String commentaireAbsence;
 	String statutDemande;
@@ -28,7 +28,7 @@ public class DtoUpdateAbsenceRequest {
 	/**
 	 * @return the datePremierJourAbsence
 	 */
-	public Date getDatePremierJourAbsence() {
+	public static Date getDatePremierJourAbsence() {
 		return datePremierJourAbsence;
 	}
 
@@ -42,7 +42,7 @@ public class DtoUpdateAbsenceRequest {
 	/**
 	 * @return the dateDernierJourAbsence
 	 */
-	public Date getDateDernierJourAbsence() {
+	public static Date getDateDernierJourAbsence() {
 		return dateDernierJourAbsence;
 	}
 
