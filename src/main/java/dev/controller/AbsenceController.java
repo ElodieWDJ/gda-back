@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,11 +71,21 @@ public class AbsenceController {
 					ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getCommentaireAbsence(),
 					EStatutDemandeAbsence.INITIALE, collegueCreantAbsence));
 
-			DtoAbsenceResponse dtoAbsence = new DtoAbsenceResponse(absence);
+			DtoAbsenceResponse dtoAbsenceRequest = new DtoAbsenceResponse(absence);
 
-			return ResponseEntity.status(HttpStatus.OK).body(dtoAbsence);
+			return ResponseEntity.status(HttpStatus.OK).body(dtoAbsenceRequest);
 		} else {
 			return ResponseEntity.badRequest().body("Problème survenu lors du Post");
 		}
 	}
+
+	@PutMapping
+	public ResponseEntity<?> editAbsence(@RequestBody DtoCreerAbsenceRequest dtoAbsenceRequest) {
+		Absence editAbsence = absenceService.updateAbsence(dtoAbsenceRequest.getIdCollegue(),
+				dtoAbsenceRequest.getDatePremierJourAbsence(), dtoAbsenceRequest.getDateDernierJourAbsence(),
+				dtoAbsenceRequest.getTypeConge(), dtoAbsenceRequest.getCommentaireAbsence(),
+				dtoAbsenceRequest.getStatutDemande());
+		return ResponseEntity.ok(new DtoAbsenceResponse(editAbsence));
+	}
+
 }

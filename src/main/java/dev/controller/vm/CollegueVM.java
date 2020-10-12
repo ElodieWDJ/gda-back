@@ -5,71 +5,27 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import dev.domain.entite.Collegue;
-import dev.domain.entite.ERole;
 
 /**
- * Structure modèlisant un collègue servant à communiquer avec l'extérieur (WEB API).
+ * Structure modèlisant un collègue servant à communiquer avec l'extérieur (WEB
+ * API).
  */
 public class CollegueVM {
 	private Long id;
-    private String email;
-    private String nom;
-    private String prenom;
+	private String email;
+	private String nom;
+	private String prenom;
 
-    private List<String> roles = new ArrayList<>();
+	private List<String> roles = new ArrayList<>();
 
-
-    public CollegueVM(Collegue col) {
-    	this.id = col.getId();
-        this.email = col.getEmail();
-        this.nom = col.getNom();
-        this.prenom = col.getPrenom();
-        this.roles = col.getRoles().stream().map( roleCollegue -> String.valueOf(roleCollegue.getRole().getValue())).collect(Collectors.toList());
-    }
-    
-    
-    public Long getId() {
-		return id;
+	public CollegueVM(Collegue col) {
+		this.id = col.getId();
+		this.email = col.getEmail();
+		this.nom = col.getNom();
+		this.prenom = col.getPrenom();
+		this.roles = col.getRoles().stream().map(roleCollegue -> String.valueOf(roleCollegue.getRole().getValue()))
+				.collect(Collectors.toList());
 	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-	public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNom() {
-        return nom;
-    }
-
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
-
-    public String getPrenom() {
-        return prenom;
-    }
-
-    public void setPrenom(String prenom) {
-        this.prenom = prenom;
-    }
-
-
-    public List<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    }
 
 	public Long getId() {
 		return id;
@@ -78,7 +34,37 @@ public class CollegueVM {
 	public void setId(Long id) {
 		this.id = id;
 	}
-    
-    
-    
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	public String getPrenom() {
+		return prenom;
+	}
+
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(List<String> roles) {
+		this.roles = roles;
+	}
+
 }
