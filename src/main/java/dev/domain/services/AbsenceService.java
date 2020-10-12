@@ -68,7 +68,7 @@ public class AbsenceService {
 			|| dateDebut.isBefore(absence.getDatePremierJourAbsence()) && dateFin.isAfter(absence.getDateDernierJourAbsence())
 			|| dateDebut.isAfter(absence.getDatePremierJourAbsence()) && dateDebut.isBefore(absence.getDateDernierJourAbsence())
 			|| dateDebut.isAfter(absence.getDatePremierJourAbsence()) && dateFin.isBefore(absence.getDateDernierJourAbsence())
-			|| dateDebut.isEqual(absence.getDatePremierJourAbsence()) ||  dateFin.isEqual(absence.getDateDernierJourAbsence())
+			|| dateDebut.isEqual(absence.getDatePremierJourAbsence()) 
 		)	{
 			
 			return this.checkerStatusAbsence(absence) ? true : false;
@@ -82,13 +82,13 @@ public class AbsenceService {
 	}
 	
 	public LocalDate getDateMax(String annee, String mois) throws ParseException {
-		Date date = this.dateUtils.getDateJusqua(annee, mois);
+		Date date = this.dateUtils.getLastDayOfMonth(annee, mois);
 		return DateUtils.convertDateToLocalDate(date);
 		
 	}
 
-	public Optional<List<Absence>> getAbsenceByDate(LocalDate dateDebutChoisi, LocalDate dateFinChoisi) {
-		return this.absenceRepo.findByDatePremierJourAbsenceAndDateDernierJourAbsence(dateDebutChoisi, dateFinChoisi);
+	public Optional<List<Absence>> getAllAbsenceByDateInterval(LocalDate dateDebutChoisi, LocalDate dateFinChoisi) {
+		return this.absenceRepo.findByDatePremierJourAbsenceGreaterThanEqualAndDateDernierJourAbsenceLessThan(dateDebutChoisi, dateFinChoisi);
 	}
 
 	

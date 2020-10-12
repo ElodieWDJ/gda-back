@@ -63,7 +63,7 @@ public class DateUtils {
 		return DateUtils.moisCalendarConversion.get(integerEnAnglais);
 	}
 	
-	public Date getDateJusqua(String annee, String mois) throws ParseException {
+	public Date getLastDayOfMonth(String annee, String mois) throws ParseException {
 		String moisEnChiffre = DateUtils.monthToConversion(mois);
 		String jourMaxDuMois = this.getNombreJourMaxParMois(Integer.parseInt(moisEnChiffre));
 		if(jourMaxDuMois.length() > 2) {
@@ -71,7 +71,6 @@ public class DateUtils {
 			return new SimpleDateFormat("dd/MM/yyyy").parse(jourMaxDuMoisFormat + "/" + moisEnChiffre + "/" + annee);
 		}else {
 			return new SimpleDateFormat("dd/MM/yyyy").parse(jourMaxDuMois + "/" + moisEnChiffre + "/" + annee);
-
 		}
 	}
 	

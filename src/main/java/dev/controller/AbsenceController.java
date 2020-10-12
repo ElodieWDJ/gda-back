@@ -54,7 +54,7 @@ public class AbsenceController {
 			LocalDate dateDebutChoisi = DateUtils.convertStringToLocalDate("01", dtoRequest.getMois(), dtoRequest.getAnnee());
 			LocalDate dateFinChoisi = this.absenceService.getDateMax(dtoRequest.getAnnee(), dtoRequest.getMois());
 			
-			Optional<List<Absence>> absences = this.absenceService.getAbsenceByDate(dateDebutChoisi, dateFinChoisi);
+			Optional<List<Absence>> absences = this.absenceService.getAllAbsenceByDateInterval(dateDebutChoisi, dateFinChoisi);
 			if(absences.isPresent()) {
 				List<Absence> absencesRecuperees = absences.get();
 				List<DtoHistogrammeResponse> response = absencesRecuperees.stream().map(absence -> new DtoHistogrammeResponse(absence)).collect(Collectors.toList());
