@@ -37,6 +37,8 @@ public class AbsenceService {
 		this.collegueRepo.save(collegue);
 		return this.absenceRepo.save(newAbsence);
 	}
+	// retourne une liste d'objet de ttes les absences
+
 
 	public boolean controleChevaucheDate(LocalDate dateDebut, LocalDate dateFin, Collegue collegue) {
 		List<Absence> absences = collegue.getListeAbsencesDuCollegue();
@@ -74,6 +76,28 @@ public class AbsenceService {
 
 	public List<Absence> getAllAbsence() {
 		return this.absenceRepo.findAll();
+	}
+
+	/**
+	 * 
+	 * @param id identifiant de l'absence recherchée
+	 * @return un objet Absence correspondant à l'absence
+	 */
+	public Optional<Absence> getById(Long id) {
+		return absenceRepo.findById(id);
+	}
+
+	public Absence updateAbsence(Long id, LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence,
+			ETypeJourAbsence typeConge, String commentaireAbsence, EStatutDemandeAbsence statut) {
+		Optional<Absence> absenceToUpdate = this.getById(id);
+		if (absenceToUpdate.isPresent()) {
+			absenceToUpdate.get().setDatePremierJourAbsence(datePremierJourAbsence);
+			absenceToUpdate.get().setDateDernierJourAbsence(dateDernierJourAbsence);
+			absenceToUpdate.get().setTypeConge(typeConge);
+			absenceToUpdate.get().setCommentaireAbsence(commentaireAbsence);
+			absenceToUpdate.get().setStatutDemandeAbsence(statut);
+		}
+		return absenceRepo.save(absenceToUpdate.get());
 	}
 
 	public List<Absence> getAbsencesByUser(Long id) throws CollegueIntrouvableException {

@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -66,6 +67,7 @@ public class AbsenceController {
 			throws CollegueIntrouvableException {
 
 		if (!resValid.hasErrors()) {
+
 			LocalDate dateDebutToLocalData = ConverterDate
 					.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
 			LocalDate dateFinToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
@@ -89,6 +91,19 @@ public class AbsenceController {
 		} else {
 			return ResponseEntity.badRequest().body("Problème survenu lors du Post");
 		}
+	}
+
+	@PutMapping
+	public ResponseEntity<?> editAbsence(@RequestBody DtoCreerAbsenceRequest dtoAbsenceRequest) {
+		LocalDate dateDebutToLocalData = ConverterDate
+				.convertDateToLocalDate(dtoAbsenceRequest.getDatePremierJourAbsence());
+		LocalDate dateFinToLocalData = ConverterDate
+				.convertDateToLocalDate(dtoAbsenceRequest.getDateDernierJourAbsence());
+		Absence editAbsence = absenceService.updateAbsence(dtoAbsenceRequest.getIdCollegue(), dateDebutToLocalData,
+				dateFinToLocalData, ETypeJourAbsence.valueOf(dtoAbsenceRequest.getTypeConge()),
+				dtoAbsenceRequest.getCommentaireAbsence(),
+				EStatutDemandeAbsence.valueOf(dtoAbsenceRequest.getStatutDemande()));
+		return ResponseEntity.ok(new DtoAbsenceResponse(editAbsence));
 	}
 
 }
