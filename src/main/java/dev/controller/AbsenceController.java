@@ -1,7 +1,6 @@
 package dev.controller;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,56 +41,54 @@ public class AbsenceController {
 		this.absenceService = absenceService;
 	}
 
-
 	@GetMapping("visualisation/user/{id}")
-    public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
-        List<Absence> absences = this.absenceService.getAbsencesByUser(id);
-        List<DtoAbsenceResponse> listeAbsenceDto = absences.stream().map(abs -> new DtoAbsenceResponse(abs)).collect(Collectors.toList());
-        
-        return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto) : ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
-    }
+	public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
+		List<Absence> absences = this.absenceService.getAbsencesByUser(id);
+		List<DtoAbsenceResponse> listeAbsenceDto = absences.stream().map(abs -> new DtoAbsenceResponse(abs))
+				.collect(Collectors.toList());
+
+		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
+				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
+	}
 
 	@GetMapping("all")
 	public ResponseEntity<?> listerAllAbsences() throws CollegueIntrouvableException {
 		List<Absence> absences = this.absenceService.getAllAbsence();
-		List<DtoAbsenceResponse> listeAbsenceDto = absences.stream().map(abs -> new DtoAbsenceResponse(abs)).collect(Collectors.toList());
+		List<DtoAbsenceResponse> listeAbsenceDto = absences.stream().map(abs -> new DtoAbsenceResponse(abs))
+				.collect(Collectors.toList());
 
-		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto) : ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
+		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
+				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
 	}
 
-	/* @GetMapping("visualisation/nbJourRestant") 
-	public int afficherNbJourRestant(@PathVariable Long idUtilisateur) throws CollegueIntrouvableException {
-		Collegue collegue = collegueService.recupererCollegue(idUtilisateur);
-		
-		return this.collegueService.getNbJourCongeRestant();
-	} */
-	
 	@PostMapping("create")
 	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid)
 			throws CollegueIntrouvableException {
-		
+
 		if (!resValid.hasErrors()) {
-				LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
-				LocalDate dateFinToLocalData =  ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
-				Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdCollegue());
-				
-				if(this.absenceService.controleChevaucheDate(dateDebutToLocalData, dateFinToLocalData, collegueCreantAbsence)) {
-					
-					Absence absence = this.absenceService.creerAbsence(new Absence(dateDebutToLocalData, dateFinToLocalData,
-							ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getCommentaireAbsence(),
-							EStatutDemandeAbsence.INITIALE, collegueCreantAbsence));
-					
-					return ResponseEntity.status(HttpStatus.OK).body(new DtoAbsenceResponse(absence));
-				
+			LocalDate dateDebutToLocalData = ConverterDate
+					.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
+			LocalDate dateFinToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
+			Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdCollegue());
+
+			if (this.absenceService.controleChevaucheDate(dateDebutToLocalData, dateFinToLocalData,
+					collegueCreantAbsence)) {
+
+				Absence absence = this.absenceService.creerAbsence(new Absence(dateDebutToLocalData, dateFinToLocalData,
+						ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getCommentaireAbsence(),
+						EStatutDemandeAbsence.INITIALE, collegueCreantAbsence));
+
+				return ResponseEntity.status(HttpStatus.OK).body(new DtoAbsenceResponse(absence));
+
 			} else {
 				String message = "L'abscence existe déjà aux dates :";
-				return ResponseEntity.badRequest().body(new DtoAbsenceExistanteResponse(message, dtoRequest.getDateDernierJourAbsence(), dtoRequest.getDateDernierJourAbsence()));
+				return ResponseEntity.badRequest().body(new DtoAbsenceExistanteResponse(message,
+						dtoRequest.getDateDernierJourAbsence(), dtoRequest.getDateDernierJourAbsence()));
 			}
 
 		} else {
 			return ResponseEntity.badRequest().body("Problème survenu lors du Post");
 		}
 	}
-	
-	
+
 }

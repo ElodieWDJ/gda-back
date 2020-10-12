@@ -1,6 +1,8 @@
 package dev.domain.entite;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -52,6 +54,27 @@ public class Absence {
 		this.collegue = collegue;
 	}
 
+// FONCTIONS CUSTOM  ----------------------------------------------------------------------------------	
+
+	public int getNbJoursAbsence() {
+
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+		LocalDate dateDebut = this.getDatePremierJourAbsence();
+		LocalDate dateFin = this.getDateDernierJourAbsence();
+
+		// passage du LocalDate en Date
+		Date date1 = Date.from(dateDebut.atStartOfDay(defaultZoneId).toInstant());
+		Date date2 = Date.from(dateFin.atStartOfDay(defaultZoneId).toInstant());
+
+		// passage du long en Integer
+		Long dateApresSoustraction = Math.abs(date2.getTime() - date1.getTime());
+		// compte les bites
+		int nbJoursAbsence = dateApresSoustraction.bitCount(dateApresSoustraction);
+		// nbJourRestant = collegue.getSoldesVacances()-nbJourParAbsence;
+
+		return nbJoursAbsence;
+	}
+
 // GETTERS AND SETTERS  ----------------------------------------------------------------------------------	
 
 	public Long getId() {
@@ -77,14 +100,6 @@ public class Absence {
 	public void setDateDernierJourAbsence(LocalDate dateDernierJourAbsence) {
 		this.dateDernierJourAbsence = dateDernierJourAbsence;
 	}
-
-//	public List<JourAbsence> getListeJourAbsence() {
-//		return listeJourAbsence;
-//	}
-//
-//	public void setListeJourAbsence(List<JourAbsence> listeJourAbsence) {
-//		this.listeJourAbsence = listeJourAbsence;
-//	}
 
 	public ETypeJourAbsence getTypeConge() {
 		return typeConge;
