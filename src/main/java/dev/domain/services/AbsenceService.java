@@ -30,7 +30,8 @@ public class AbsenceService {
 		if (newAbsence.getTypeConge() == ETypeJourAbsence.CONGE_PAYE) {
 			collegue.setSoldesCP(collegue.getSoldesCP() - newAbsence.getNbJoursAbsence());
 		} else if (newAbsence.getTypeConge() == ETypeJourAbsence.RTT) {
-			collegue.setSoldesRTT(collegue.getSoldesCP() - newAbsence.getNbJoursAbsence());
+			collegue.setSoldesRTT(collegue.getSoldesRTT() - newAbsence.getNbJoursAbsence());
+			System.out.println("test");
 		}
 
 		this.collegueRepo.save(collegue);

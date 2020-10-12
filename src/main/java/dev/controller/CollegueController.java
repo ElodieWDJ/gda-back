@@ -22,16 +22,16 @@ public class CollegueController {
 	}
 
 	@GetMapping("nbCongePayeRestants")
-	public ResponseEntity<?> getNbCongePayeRestants(@RequestParam int idUtilisateur)
-			throws CollegueIntrouvableException {
+	public ResponseEntity<?> getNbCongePayeRestants(@RequestParam int idUtilisateur) throws CollegueIntrouvableException {
 		Collegue collegue = this.collegueService.recupererCollegue(Integer.toUnsignedLong(idUtilisateur));
 		return ResponseEntity.ok(collegue.getSoldesCP());
 	}
 
 	@GetMapping("nbRttRestants")
-	public ResponseEntity<?> getNbRttRestants() throws CollegueIntrouvableException {
-
-		return null;
+	public ResponseEntity<?> getNbRttRestants(@RequestParam int idUtilisateur) throws CollegueIntrouvableException {
+		// toUnsigned Long : Int en long
+		Collegue collegue = this.collegueService.recupererCollegue(Integer.toUnsignedLong(idUtilisateur));
+		return ResponseEntity.ok(collegue.getSoldesRTT());
 	}
 
 	/*
