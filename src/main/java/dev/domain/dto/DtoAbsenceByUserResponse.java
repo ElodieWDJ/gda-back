@@ -1,9 +1,7 @@
 package dev.domain.dto;
 
 import java.time.LocalDate;
-
 import dev.domain.entite.Absence;
-
 
 public class DtoAbsenceByUserResponse {
 
@@ -12,14 +10,17 @@ public class DtoAbsenceByUserResponse {
 	String typeConge;
 	String commentaireAbsence;
 	String statutDemande;
-	
-	public DtoAbsenceByUserResponse(Absence absence) {
-	
+
+	Long nbJourAbsence;
+
+	public DtoAbsenceByUserResponse(Absence absence, Long nbJourAbsence) {
+
 		this.datePremierJourAbsence = absence.getDatePremierJourAbsence();
 		this.dateDernierJourAbsence = absence.getDateDernierJourAbsence();
 		this.typeConge = absence.getTypeConge().toString();
 		this.commentaireAbsence = absence.getCommentaireAbsence();
 		this.statutDemande = absence.getStatutDemandeAbsence().toString();
+		this.nbJourAbsence = nbJourAbsence;
 	}
 
 	public LocalDate getDatePremierJourAbsence() {
@@ -61,6 +62,5 @@ public class DtoAbsenceByUserResponse {
 	public void setStatutDemande(String statutDemande) {
 		this.statutDemande = statutDemande;
 	}
-	
-	
+
 }

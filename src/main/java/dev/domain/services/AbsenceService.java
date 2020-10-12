@@ -24,11 +24,21 @@ public class AbsenceService {
 		this.collegueRepo = collegueRepo;
 	}
 
-	public Absence creerAbsence(Absence absence) {
-		return this.absenceRepo.save(absence);
-	}
+	public Absence creerAbsence(Absence newAbsence) {
+		Collegue collegue = newAbsence.getCollegue();
 
+		if (newAbsence.getTypeConge() == ETypeJourAbsence.CONGE_PAYE) {
+			collegue.setSoldesCP(collegue.getSoldesCP() - newAbsence.getNbJoursAbsence());
+		} else if (newAbsence.getTypeConge() == ETypeJourAbsence.RTT) {
+			collegue.setSoldesRTT(collegue.getSoldesRTT() - newAbsence.getNbJoursAbsence());
+			System.out.println("test");
+		}
+
+		this.collegueRepo.save(collegue);
+		return this.absenceRepo.save(newAbsence);
+	}
 	// retourne une liste d'objet de ttes les absences
+
 
 	public boolean controleChevaucheDate(LocalDate dateDebut, LocalDate dateFin, Collegue collegue) {
 		List<Absence> absences = collegue.getListeAbsencesDuCollegue();

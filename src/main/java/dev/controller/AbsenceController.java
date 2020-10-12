@@ -50,7 +50,6 @@ public class AbsenceController {
 
 		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
 				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
-
 	}
 
 	@GetMapping("all")

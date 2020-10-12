@@ -29,8 +29,25 @@ public class Collegue {
 
 	@OneToMany(mappedBy = "collegue")
 	private List<Absence> ListeAbsencesDuCollegue;
-	
-	private Integer soldesVacances = 60;
+
+	private Integer soldesRTT = 24;
+	private Integer soldesCP = 25;
+
+	public Integer getSoldesRTT() {
+		return soldesRTT;
+	}
+
+	public void setSoldesRTT(Integer soldesRTT) {
+		this.soldesRTT = soldesRTT;
+	}
+
+	public Integer getSoldesCP() {
+		return soldesCP;
+	}
+
+	public void setSoldesCP(Integer soldesCP) {
+		this.soldesCP = soldesCP;
+	}
 
 	/**
 	 * @return the listeAbsencesDuCollegue
@@ -94,13 +111,4 @@ public class Collegue {
 		this.prenom = prenom;
 	}
 
-	public Integer getSoldesVacances() {
-		return soldesVacances;
-	}
-
-	public void setSoldesVacances(Integer soldesVacances) {
-		this.soldesVacances = soldesVacances;
-	}
-	
-	
 }

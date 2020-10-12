@@ -1,6 +1,9 @@
 package dev.domain.entite;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -52,6 +55,44 @@ public class Absence {
 		this.collegue = collegue;
 	}
 
+// FONCTIONS CUSTOM  ----------------------------------------------------------------------------------	
+
+	public int getNbJoursAbsence() {
+
+		ZoneId defaultZoneId = ZoneId.systemDefault();
+		LocalDate dateDebut = this.getDatePremierJourAbsence();
+		LocalDate dateFin = this.getDateDernierJourAbsence();
+		long nbJourAbsence = 0;
+
+		int retour = 0; 
+		
+		
+		// passage du LocalDate en Date
+		Date date1 = Date.from(dateDebut.atStartOfDay(defaultZoneId).toInstant());
+		Date date2 = Date.from(dateFin.atStartOfDay(defaultZoneId).toInstant());
+
+		if (date1 != null && date2 != null) {
+			final long MILLISECOND_PER_DAY = 1000 * 60 * 60 * 24;
+			long difference = date2.getTime()-date1.getTime();
+			
+			 nbJourAbsence =  (difference / MILLISECOND_PER_DAY);
+			retour = (int) Math.round(nbJourAbsence) + 1 ;
+		}
+		
+		return retour;
+
+		/*
+		 * passage du long en Integer Long dateApresSoustraction =
+		 * Math.abs(date2.getTime() - date1.getTime());
+		 * System.out.println(dateApresSoustraction); // compte les bites int
+		 * nbJoursAbsence = dateApresSoustraction.bitCount(dateApresSoustraction);
+		 * System.out.println(nbJoursAbsence); // nbJourRestant =
+		 * collegue.getSoldesVacances()-nbJourParAbsence;
+		 */
+
+		// return nbJoursAbsence;
+	}
+
 // GETTERS AND SETTERS  ----------------------------------------------------------------------------------	
 
 	public Long getId() {
@@ -77,14 +118,6 @@ public class Absence {
 	public void setDateDernierJourAbsence(LocalDate dateDernierJourAbsence) {
 		this.dateDernierJourAbsence = dateDernierJourAbsence;
 	}
-
-//	public List<JourAbsence> getListeJourAbsence() {
-//		return listeJourAbsence;
-//	}
-//
-//	public void setListeJourAbsence(List<JourAbsence> listeJourAbsence) {
-//		this.listeJourAbsence = listeJourAbsence;
-//	}
 
 	public ETypeJourAbsence getTypeConge() {
 		return typeConge;
