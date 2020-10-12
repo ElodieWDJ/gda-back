@@ -49,7 +49,6 @@ public class AbsenceController {
         List<DtoAbsenceResponse> listeAbsenceDto = absences.stream().map(abs -> new DtoAbsenceResponse(abs)).collect(Collectors.toList());
         
         return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto) : ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
-        
     }
 
 	@GetMapping("all")
@@ -60,6 +59,12 @@ public class AbsenceController {
 		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto) : ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
 	}
 
+	/* @GetMapping("visualisation/nbJourRestant") 
+	public int afficherNbJourRestant(@PathVariable Long idUtilisateur) throws CollegueIntrouvableException {
+		Collegue collegue = collegueService.recupererCollegue(idUtilisateur);
+		
+		return this.collegueService.getNbJourCongeRestant();
+	} */
 	
 	@PostMapping("create")
 	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid)

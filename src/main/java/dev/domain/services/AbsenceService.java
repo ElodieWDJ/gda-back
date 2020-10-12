@@ -1,10 +1,15 @@
 package dev.domain.services;
 
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import org.springframework.stereotype.Service;
 
 import dev.domain.entite.Absence;
@@ -13,6 +18,7 @@ import dev.domain.enums.EStatutDemandeAbsence;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.repository.AbsenceRepo;
 import dev.repository.CollegueRepo;
+import dev.domain.enums.ETypeJourAbsence;
 
 @Service
 public class AbsenceService {
@@ -26,6 +32,14 @@ public class AbsenceService {
 	}
 
 	public Absence creerAbsence(Absence absence) {
+		Collegue collegue = absence.getCollegue();
+		// collegue.setSoldesCP(0);
+		//	collegue.setSoldesRTT(soldesRTT);
+		if (absence.getTypeConge() == ETypeJourAbsence.CONGE_PAYE) {
+			
+		} else if(absence.getTypeConge() == ETypeJourAbsence.RTT) {
+			
+		}
 		return this.absenceRepo.save(absence);
 	}
 
@@ -78,5 +92,7 @@ public class AbsenceService {
 		}
 
 	}
+	
+	
 
 }
