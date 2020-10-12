@@ -21,7 +21,6 @@ import dev.domain.dto.DtoAbsenceExistanteResponse;
 import dev.domain.dto.DtoAbsenceResponse;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
-import dev.domain.dto.DtoUpdateAbsenceRequest;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
@@ -98,13 +97,13 @@ public class AbsenceController {
 	@PutMapping
 	public ResponseEntity<?> editAbsence(@RequestBody DtoCreerAbsenceRequest dtoAbsenceRequest) {
 		LocalDate dateDebutToLocalData = ConverterDate
-				.convertDateToLocalDate(DtoAbsenceRequest.getDatePremierJourAbsence());
+				.convertDateToLocalDate(dtoAbsenceRequest.getDatePremierJourAbsence());
 		LocalDate dateFinToLocalData = ConverterDate
-				.convertDateToLocalDate(DtoUpdateAbsenceRequest.getDateDernierJourAbsence());
-		Absence editAbsence = absenceService.updateAbsence(dtoAbsenceRequest.getIdCollegue(),
-				dtoAbsenceRequest.getDatePremierJourAbsence(), dtoAbsenceRequest.getDateDernierJourAbsence(),
-				dtoAbsenceRequest.getTypeConge(), dtoAbsenceRequest.getCommentaireAbsence(),
-				dtoAbsenceRequest.getStatutDemande());
+				.convertDateToLocalDate(dtoAbsenceRequest.getDateDernierJourAbsence());
+		Absence editAbsence = absenceService.updateAbsence(dtoAbsenceRequest.getIdCollegue(), dateDebutToLocalData,
+				dateFinToLocalData, ETypeJourAbsence.valueOf(dtoAbsenceRequest.getTypeConge()),
+				dtoAbsenceRequest.getCommentaireAbsence(),
+				EStatutDemandeAbsence.valueOf(dtoAbsenceRequest.getStatutDemande()));
 		return ResponseEntity.ok(new DtoAbsenceResponse(editAbsence));
 	}
 
