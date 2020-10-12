@@ -2,13 +2,13 @@ package dev.domain.dto;
 
 public class DtoHistogrammeRequest {
 	String departement;
-	Integer mois;
-	String année;
+	String mois;
+	String annee;
 	
-	public DtoHistogrammeRequest(String departement, Integer mois, String année) {
+	public DtoHistogrammeRequest(String departement, String mois, String annee) {
 		this.departement = departement;
 		this.mois = mois;
-		this.année = année;
+		this.annee = annee;
 	}
 
 	public String getDepartement() {
@@ -19,19 +19,19 @@ public class DtoHistogrammeRequest {
 		this.departement = departement;
 	}
 
-	public Integer getMois() {
+	public String getMois() {
 		return mois;
 	}
 
-	public void setMois(Integer mois) {
+	public void setMois(String mois) {
 		this.mois = mois;
 	}
 
-	public String getAnnée() {
-		return année;
+	public String getAnnee() {
+		return annee;
 	}
 
-	public void setAnnée(String année) {
-		this.année = année;
+	public void setAnnee(String année) {
+		this.annee = année;
 	}
 }

@@ -81,7 +81,7 @@ public class AbsenceService {
 		return absence.getStatutDemandeAbsence().equals(EStatutDemandeAbsence.REJETEE) ? true : false;
 	}
 	
-	public LocalDate getDateMax(String annee, Integer mois) throws ParseException {
+	public LocalDate getDateMax(String annee, String mois) throws ParseException {
 		Date date = this.dateUtils.getDateJusqua(annee, mois);
 		return DateUtils.convertDateToLocalDate(date);
 		

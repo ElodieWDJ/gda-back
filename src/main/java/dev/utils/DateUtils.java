@@ -17,7 +17,7 @@ import dev.domain.enums.EMois;
 @Component
 public class DateUtils {
 	
-	protected Map<EMois, Integer> moisCalendarRelation = Map.ofEntries(
+	protected static Map<EMois, Integer> moisCalendarRelation = Map.ofEntries(
 			new AbstractMap.SimpleEntry<EMois, Integer>(EMois.JANVIER, Calendar.JANUARY),
 			new AbstractMap.SimpleEntry<EMois, Integer>(EMois.FEVRIER, Calendar.FEBRUARY),
 			new AbstractMap.SimpleEntry<EMois, Integer>(EMois.MARS, Calendar.MARCH),
@@ -33,7 +33,7 @@ public class DateUtils {
 			
 	);
 	
-	protected Map<Integer, String> moisCalendarConversion = Map.ofEntries(
+	protected static Map<Integer, String> moisCalendarConversion = Map.ofEntries(
 			new AbstractMap.SimpleEntry<Integer, String>(Calendar.JANUARY, "01"),
 			new AbstractMap.SimpleEntry<Integer, String>(Calendar.FEBRUARY, "02"),
 			new AbstractMap.SimpleEntry<Integer, String>(Calendar.MARCH, "03"),
@@ -54,12 +54,25 @@ public class DateUtils {
 		 return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 	}		
 	
-	public static LocalDate convertStringToLocalDate(String jour, Integer mois, String annee) {
-		return LocalDate.parse(jour + "-" + mois + "-" + annee);
+	public static LocalDate convertStringToLocalDate(String jour, String mois, String annee) {
+		String moisEnChiffre = DateUtils.monthToConversion(mois);
+		return LocalDate.parse(annee + "-" + moisEnChiffre + "-" + jour);
+	}
+	private static String monthToConversion(String mois) {
+		Integer integerEnAnglais = DateUtils.moisCalendarRelation.get(EMois.valueOf(mois));
+		return DateUtils.moisCalendarConversion.get(integerEnAnglais);
 	}
 	
-	public Date getDateJusqua(String annee, Integer mois) throws ParseException {
-		return new SimpleDateFormat("dd/MM/yyyy").parse(this.getNombreJourMaxParMois(mois) + "/" + mois + "/" + annee);
+	public Date getDateJusqua(String annee, String mois) throws ParseException {
+		String moisEnChiffre = DateUtils.monthToConversion(mois);
+		String jourMaxDuMois = this.getNombreJourMaxParMois(Integer.parseInt(moisEnChiffre));
+		if(jourMaxDuMois.length() > 2) {
+			String jourMaxDuMoisFormat = jourMaxDuMois.subSequence(1, jourMaxDuMois.length()).toString();
+			return new SimpleDateFormat("dd/MM/yyyy").parse(jourMaxDuMoisFormat + "/" + moisEnChiffre + "/" + annee);
+		}else {
+			return new SimpleDateFormat("dd/MM/yyyy").parse(jourMaxDuMois + "/" + moisEnChiffre + "/" + annee);
+
+		}
 	}
 	
 	private String getNombreJourMaxParMois(Integer mois) {
@@ -67,4 +80,6 @@ public class DateUtils {
 		cal.set(Calendar.MONTH,  mois);
 		return String.format("%03d", cal.getActualMaximum(Calendar.DAY_OF_MONTH));
 	}
+
+	
 }

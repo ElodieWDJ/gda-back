@@ -40,7 +40,7 @@ public class AbsenceController {
 
 	private CollegueService collegueService;
 	private AbsenceService absenceService;
-
+	
 	public AbsenceController(CollegueService collegueService, AbsenceService absenceService) {
 		this.collegueService = collegueService;
 		this.absenceService = absenceService;
@@ -49,11 +49,11 @@ public class AbsenceController {
 	@PostMapping("manager/histogramme")
 	public ResponseEntity<?> getAbsenceByDate(@RequestBody @Valid DtoHistogrammeRequest dtoRequest, BindingResult resValid) throws ParseException {
 		if(!resValid.hasErrors()) {
-			Integer mois = dtoRequest.getMois();
-			String annee = dtoRequest.getAnnée();
 			String département = dtoRequest.getDepartement();
-			LocalDate dateDebutChoisi = DateUtils.convertStringToLocalDate("01", mois, annee);
-			LocalDate dateFinChoisi = this.absenceService.getDateMax(annee, mois);
+			
+			LocalDate dateDebutChoisi = DateUtils.convertStringToLocalDate("01", dtoRequest.getMois(), dtoRequest.getAnnee());
+			LocalDate dateFinChoisi = this.absenceService.getDateMax(dtoRequest.getAnnee(), dtoRequest.getMois());
+			
 			Optional<List<Absence>> absences = this.absenceService.getAbsenceByDate(dateDebutChoisi, dateFinChoisi);
 			if(absences.isPresent()) {
 				List<Absence> absencesRecuperees = absences.get();
