@@ -1,8 +1,9 @@
 package dev.controller;
 
+import java.text.ParseException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -19,8 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.dto.DtoAbsenceExistanteResponse;
 import dev.domain.dto.DtoAbsenceResponse;
+import dev.domain.dto.DtoAbsencesIntroubles;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
+import dev.domain.dto.DtoHistogrammeRequest;
+import dev.domain.dto.DtoHistogrammeResponse;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
@@ -28,7 +32,7 @@ import dev.domain.enums.ETypeJourAbsence;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
-import dev.utils.ConverterDate;
+import dev.utils.DateUtils;
 
 @RestController
 @RequestMapping("absence") // http://localhost:4200/connexion
@@ -41,7 +45,27 @@ public class AbsenceController {
 		this.collegueService = collegueService;
 		this.absenceService = absenceService;
 	}
-
+	
+	@PostMapping("manager/histogramme")
+	public ResponseEntity<?> getAbsenceByDate(@RequestBody @Valid DtoHistogrammeRequest dtoRequest, BindingResult resValid) throws ParseException {
+		if(!resValid.hasErrors()) {
+			Integer mois = dtoRequest.getMois();
+			String annee = dtoRequest.getAnnée();
+			String département = dtoRequest.getDepartement();
+			LocalDate dateDebutChoisi = DateUtils.convertStringToLocalDate("01", mois, annee);
+			LocalDate dateFinChoisi = this.absenceService.getDateMax(annee, mois);
+			Optional<List<Absence>> absences = this.absenceService.getAbsenceByDate(dateDebutChoisi, dateFinChoisi);
+			if(absences.isPresent()) {
+				List<Absence> absencesRecuperees = absences.get();
+				List<DtoHistogrammeResponse> response = absencesRecuperees.stream().map(absence -> new DtoHistogrammeResponse(absence)).collect(Collectors.toList());
+				return ResponseEntity.ok(response);
+			} else {
+				return ResponseEntity.ok(new DtoAbsencesIntroubles("Aucune absences pour cette intervale !"));
+			}
+		} else {
+			return ResponseEntity.badRequest().body("Un problème est survenu");
+		}
+	}
 
 	@GetMapping("visualisation/user/{id}")
     public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
@@ -66,8 +90,8 @@ public class AbsenceController {
 			throws CollegueIntrouvableException {
 		
 		if (!resValid.hasErrors()) {
-				LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
-				LocalDate dateFinToLocalData =  ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
+				LocalDate dateDebutToLocalData = DateUtils.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
+				LocalDate dateFinToLocalData =  DateUtils.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
 				Collegue collegueCreantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdCollegue());
 				
 				if(this.absenceService.controleChevaucheDate(dateDebutToLocalData, dateFinToLocalData, collegueCreantAbsence)) {
