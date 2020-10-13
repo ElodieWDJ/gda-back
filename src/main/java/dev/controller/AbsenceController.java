@@ -1,7 +1,9 @@
 package dev.controller;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.validation.Valid;
@@ -21,6 +23,8 @@ import dev.domain.dto.DtoAbsenceExistanteResponse;
 import dev.domain.dto.DtoAbsenceResponse;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
+import dev.domain.dto.DtoHistogrammeRequest;
+import dev.domain.dto.DtoHistogrammeResponse;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
@@ -29,6 +33,7 @@ import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
 import dev.utils.ConverterDate;
+import dev.utils.DateUtils;
 
 @RestController
 @RequestMapping("absence") // http://localhost:4200/connexion
@@ -41,7 +46,28 @@ public class AbsenceController {
 		this.collegueService = collegueService;
 		this.absenceService = absenceService;
 	}
-
+	
+	@PostMapping("manager/histogramme")
+	public ResponseEntity<?> getAbsenceByDate(@RequestBody @Valid DtoHistogrammeRequest dtoRequest, BindingResult resValid) throws ParseException {
+		if(!resValid.hasErrors()) {
+			String département = dtoRequest.getDepartement();
+			
+			LocalDate dateDebutChoisi = DateUtils.convertStringToLocalDate("01", dtoRequest.getMois(), dtoRequest.getAnnee());
+			LocalDate dateFinChoisi = this.absenceService.getDateMax(dtoRequest.getAnnee(), dtoRequest.getMois());
+			
+			Optional<List<Absence>> absences = this.absenceService.getAllAbsenceByDateInterval(dateDebutChoisi, dateFinChoisi);
+			if(absences.isPresent()) {
+				List<Absence> absencesRecuperees = absences.get();
+				List<DtoHistogrammeResponse> response = absencesRecuperees.stream().map(absence -> new DtoHistogrammeResponse(absence)).collect(Collectors.toList());
+				return ResponseEntity.ok(response);
+			} else {
+				return ResponseEntity.ok(new CollegueIntrouvableException("Aucune absences pour cette intervale !"));
+			}
+		} else {
+			return ResponseEntity.badRequest().body("Un problème est survenu");
+		}
+	}
+	
 	@GetMapping("visualisation/user/{id}")
 	public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
 		List<Absence> absences = this.absenceService.getAbsencesByUser(id);
