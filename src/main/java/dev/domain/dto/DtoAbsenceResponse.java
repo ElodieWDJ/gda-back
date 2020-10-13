@@ -1,11 +1,13 @@
 package dev.domain.dto;
 
 import java.time.LocalDate;
+
 import dev.domain.entite.Absence;
 
 public class DtoAbsenceResponse {
 
 	long idCollegue;
+	long idAbsence;
 	LocalDate datePremierJourAbsence;
 	LocalDate dateDernierJourAbsence;
 	String typeConge;
@@ -13,13 +15,21 @@ public class DtoAbsenceResponse {
 	String statutDemande;
 
 	public DtoAbsenceResponse(Absence abs) {
+		this.idAbsence = abs.getId();
 		this.idCollegue = abs.getCollegue().getId();
 		this.datePremierJourAbsence = abs.getDatePremierJourAbsence();
 		this.dateDernierJourAbsence = abs.getDateDernierJourAbsence();
 		this.typeConge = abs.getTypeConge().toString();
-		// this.typeConge = "test type";
 		this.commentaireAbsence = abs.getCommentaireAbsence();
 		this.statutDemande = abs.getStatutDemandeAbsence().toString();
+	}
+
+	public long getIdAbsence() {
+		return idAbsence;
+	}
+
+	public void setIdAbsence(long idAbsence) {
+		this.idAbsence = idAbsence;
 	}
 
 	public long getIdCollegue() {
@@ -71,4 +81,3 @@ public class DtoAbsenceResponse {
 	}
 
 }
-

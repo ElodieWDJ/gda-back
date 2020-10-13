@@ -21,6 +21,7 @@ import dev.domain.dto.DtoAbsenceExistanteResponse;
 import dev.domain.dto.DtoAbsenceResponse;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
+import dev.domain.dto.DtoUpdateAbsenceRequest;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
@@ -93,16 +94,22 @@ public class AbsenceController {
 		}
 	}
 
-	@PutMapping
-	public ResponseEntity<?> editAbsence(@RequestBody DtoCreerAbsenceRequest dtoAbsenceRequest) {
-		LocalDate dateDebutToLocalData = ConverterDate
-				.convertDateToLocalDate(dtoAbsenceRequest.getDatePremierJourAbsence());
-		LocalDate dateFinToLocalData = ConverterDate
-				.convertDateToLocalDate(dtoAbsenceRequest.getDateDernierJourAbsence());
-		Absence editAbsence = absenceService.updateAbsence(dtoAbsenceRequest.getIdCollegue(), dateDebutToLocalData,
-				dateFinToLocalData, ETypeJourAbsence.valueOf(dtoAbsenceRequest.getTypeConge()),
-				dtoAbsenceRequest.getCommentaireAbsence(),
-				EStatutDemandeAbsence.valueOf(dtoAbsenceRequest.getStatutDemande()));
+	@PutMapping("modifier")
+	public ResponseEntity<?> editAbsence(@RequestBody DtoUpdateAbsenceRequest dtoRequest)
+			throws CollegueIntrouvableException {
+
+		LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
+
+		LocalDate dateFinToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
+
+		Collegue collegueModifiantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdCollegue());
+
+		Absence absUpdated = new Absence(dtoRequest.getIdAbsence(), dateDebutToLocalData, dateFinToLocalData,
+				ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getCommentaireAbsence(),
+				EStatutDemandeAbsence.valueOf(dtoRequest.getStatutDemande()), collegueModifiantAbsence);
+
+		Absence editAbsence = absenceService.updateAbsence(absUpdated);
+
 		return ResponseEntity.ok(new DtoAbsenceResponse(editAbsence));
 	}
 

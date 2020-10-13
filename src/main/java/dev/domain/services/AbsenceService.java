@@ -39,7 +39,6 @@ public class AbsenceService {
 	}
 	// retourne une liste d'objet de ttes les absences
 
-
 	public boolean controleChevaucheDate(LocalDate dateDebut, LocalDate dateFin, Collegue collegue) {
 		List<Absence> absences = collegue.getListeAbsencesDuCollegue();
 		boolean controleValide = true;
@@ -87,15 +86,14 @@ public class AbsenceService {
 		return absenceRepo.findById(id);
 	}
 
-	public Absence updateAbsence(Long id, LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence,
-			ETypeJourAbsence typeConge, String commentaireAbsence, EStatutDemandeAbsence statut) {
-		Optional<Absence> absenceToUpdate = this.getById(id);
+	public Absence updateAbsence(Absence absUpdated) {
+		Optional<Absence> absenceToUpdate = this.getById(absUpdated.getId());
 		if (absenceToUpdate.isPresent()) {
-			absenceToUpdate.get().setDatePremierJourAbsence(datePremierJourAbsence);
-			absenceToUpdate.get().setDateDernierJourAbsence(dateDernierJourAbsence);
-			absenceToUpdate.get().setTypeConge(typeConge);
-			absenceToUpdate.get().setCommentaireAbsence(commentaireAbsence);
-			absenceToUpdate.get().setStatutDemandeAbsence(statut);
+			absenceToUpdate.get().setDatePremierJourAbsence(absUpdated.getDatePremierJourAbsence());
+			absenceToUpdate.get().setDateDernierJourAbsence(absUpdated.getDateDernierJourAbsence());
+			absenceToUpdate.get().setTypeConge(absUpdated.getTypeConge());
+			absenceToUpdate.get().setCommentaireAbsence(absUpdated.getCommentaireAbsence());
+			absenceToUpdate.get().setStatutDemandeAbsence(absUpdated.getStatutDemandeAbsence());
 		}
 		return absenceRepo.save(absenceToUpdate.get());
 	}
