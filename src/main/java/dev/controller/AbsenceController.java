@@ -66,7 +66,7 @@ public class AbsenceController {
 	}
 
 	@GetMapping("joursferies/{annee}")
-	public ResponseEntity<?> listerAllJoursFeriesEtRttEmployeur(@RequestParam Integer annee)
+	public ResponseEntity<?> listerAllJoursFeriesEtRttEmployeur(@PathVariable Integer annee)
 			throws AbsenceIntrouvableException {
 		List<Absence> absences = this.absenceService.getAllRttEtJoursFeries(annee);
 		List<DtoJoursFerieResponse> listeJourFerieDto = absences.stream().map(abs -> new DtoJoursFerieResponse(abs))
