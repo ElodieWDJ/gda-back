@@ -15,16 +15,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.dto.DtoAbsenceExistanteResponse;
 import dev.domain.dto.DtoAbsenceResponse;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
+import dev.domain.dto.DtoJoursFerieResponse;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
 import dev.domain.enums.ETypeJourAbsence;
+import dev.domain.exceptions.AbsenceIntrouvableException;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
@@ -60,6 +63,17 @@ public class AbsenceController {
 
 		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
 				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
+	}
+
+	@GetMapping("joursferies/{annee}")
+	public ResponseEntity<?> listerAllJoursFeriesEtRttEmployeur(@RequestParam Integer annee)
+			throws AbsenceIntrouvableException {
+		List<Absence> absences = this.absenceService.getAllRttEtJoursFeries(annee);
+		List<DtoJoursFerieResponse> listeJourFerieDto = absences.stream().map(abs -> new DtoJoursFerieResponse(abs))
+				.collect(Collectors.toList());
+
+		return (absences.size() != 0) ? ResponseEntity.ok(listeJourFerieDto)
+				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucun jours Fériés ou RTT employeur enregistrés"));
 	}
 
 	@PostMapping("create")
