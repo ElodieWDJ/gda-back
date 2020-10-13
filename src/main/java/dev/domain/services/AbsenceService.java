@@ -86,6 +86,28 @@ public class AbsenceService {
 		return DateUtils.convertDateToLocalDate(date);
 		
 	}
+	
+	/**
+	 * 
+	 * @param id identifiant de l'absence recherchée
+	 * @return un objet Absence correspondant à l'absence
+	 */
+	public Optional<Absence> getById(Long id) {
+		return absenceRepo.findById(id);
+	}
+	
+	public Absence updateAbsence(Long id, LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence,
+			ETypeJourAbsence typeConge, String commentaireAbsence, EStatutDemandeAbsence statut) {
+		Optional<Absence> absenceToUpdate = this.getById(id);
+		if (absenceToUpdate.isPresent()) {
+			absenceToUpdate.get().setDatePremierJourAbsence(datePremierJourAbsence);
+			absenceToUpdate.get().setDateDernierJourAbsence(dateDernierJourAbsence);
+			absenceToUpdate.get().setTypeConge(typeConge);
+			absenceToUpdate.get().setCommentaireAbsence(commentaireAbsence);
+			absenceToUpdate.get().setStatutDemandeAbsence(statut);
+		}
+		return absenceRepo.save(absenceToUpdate.get());
+	}
 
 	public Optional<List<Absence>> getAllAbsenceByDateInterval(LocalDate dateDebutChoisi, LocalDate dateFinChoisi) {
 		return this.absenceRepo.findByDatePremierJourAbsenceGreaterThanEqualAndDateDernierJourAbsenceLessThan(dateDebutChoisi, dateFinChoisi);

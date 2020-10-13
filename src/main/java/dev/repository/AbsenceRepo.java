@@ -10,6 +10,7 @@ import dev.domain.entite.Absence;
 
 public interface AbsenceRepo extends JpaRepository<Absence, Long> {
 
-	Optional<Absence> findByDatePremierJourAbsenceAndDateDernierJourAbsence(LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence);
+	Optional<List<Absence>> findByDatePremierJourAbsenceAndDateDernierJourAbsence(LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence);
+	Optional<List<Absence>> findByDatePremierJourAbsenceGreaterThanEqualAndDateDernierJourAbsenceLessThan(LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence);
 
 }
