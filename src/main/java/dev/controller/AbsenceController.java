@@ -60,8 +60,8 @@ public class AbsenceController {
 																							absence.getDateDernierJourAbsence(), 
 																							absence.getTypeConge().toString(), 
 																							absence.getCollegue().getNom(), 
-																							absence.getCollegue().getPrenom())).collect(Collectors.toList()
-																						);
+																							absence.getCollegue().getPrenom()))
+																	.collect(Collectors.toList());
 
 			return ResponseEntity.ok(response);
 		} else {
