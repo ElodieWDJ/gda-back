@@ -69,7 +69,7 @@ public class AbsenceController {
 		}
 	}
 	
-	@PostMapping("valider")
+	@PutMapping("valider")
 	public ResponseEntity<?> valideAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
 		if(!resValid.hasErrors()) {
 			Optional<Absence> absence = this.absenceService.getById(dtoUpdateAbsence.getIdAbsence());
@@ -92,6 +92,7 @@ public class AbsenceController {
 			return ResponseEntity.badRequest().body("Une errreur est survenue");
 		}
 	}
+	
 	
 	@PutMapping("rejeter")
 	public ResponseEntity<?> rejeterAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
