@@ -2,7 +2,6 @@ package dev.domain.entite;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -45,6 +44,18 @@ public class Absence {
 
 	}
 
+	public Absence(Long idAbsence, LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence,
+			ETypeJourAbsence typeConge, String commentaireAbsence, EStatutDemandeAbsence statutDemandeAbsence,
+			Collegue collegue) {
+		this.datePremierJourAbsence = datePremierJourAbsence;
+		this.dateDernierJourAbsence = dateDernierJourAbsence;
+		this.typeConge = typeConge;
+		this.commentaireAbsence = commentaireAbsence;
+		this.statutDemandeAbsence = statutDemandeAbsence;
+		this.collegue = collegue;
+		this.id = idAbsence;
+	}
+
 	public Absence(LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence, ETypeJourAbsence typeConge,
 			String commentaireAbsence, EStatutDemandeAbsence statutDemandeAbsence, Collegue collegue) {
 		this.datePremierJourAbsence = datePremierJourAbsence;
@@ -53,6 +64,7 @@ public class Absence {
 		this.commentaireAbsence = commentaireAbsence;
 		this.statutDemandeAbsence = statutDemandeAbsence;
 		this.collegue = collegue;
+
 	}
 
 // FONCTIONS CUSTOM  ----------------------------------------------------------------------------------	
@@ -64,21 +76,20 @@ public class Absence {
 		LocalDate dateFin = this.getDateDernierJourAbsence();
 		long nbJourAbsence = 0;
 
-		int retour = 0; 
-		
-		
+		int retour = 0;
+
 		// passage du LocalDate en Date
 		Date date1 = Date.from(dateDebut.atStartOfDay(defaultZoneId).toInstant());
 		Date date2 = Date.from(dateFin.atStartOfDay(defaultZoneId).toInstant());
 
 		if (date1 != null && date2 != null) {
 			final long MILLISECOND_PER_DAY = 1000 * 60 * 60 * 24;
-			long difference = date2.getTime()-date1.getTime();
-			
-			 nbJourAbsence =  (difference / MILLISECOND_PER_DAY);
-			retour = (int) Math.round(nbJourAbsence) + 1 ;
+			long difference = date2.getTime() - date1.getTime();
+
+			nbJourAbsence = (difference / MILLISECOND_PER_DAY);
+			retour = (int) Math.round(nbJourAbsence) + 1;
 		}
-		
+
 		return retour;
 
 		/*

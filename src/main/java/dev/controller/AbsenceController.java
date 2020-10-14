@@ -15,19 +15,17 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.domain.dto.DtoAbsenceExistanteResponse;
 import dev.domain.dto.DtoAbsenceResponse;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
-import dev.domain.dto.DtoJoursFerieResponse;
+import dev.domain.dto.DtoUpdateAbsenceRequest;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
 import dev.domain.enums.ETypeJourAbsence;
-import dev.domain.exceptions.AbsenceIntrouvableException;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
@@ -65,17 +63,6 @@ public class AbsenceController {
 				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
 	}
 
-	@GetMapping("joursferies/{annee}")
-	public ResponseEntity<?> listerAllJoursFeriesEtRttEmployeur(@PathVariable Integer annee)
-			throws AbsenceIntrouvableException {
-		List<Absence> absences = this.absenceService.getAllRttEtJoursFeries(annee);
-		List<DtoJoursFerieResponse> listeJourFerieDto = absences.stream().map(abs -> new DtoJoursFerieResponse(abs))
-				.collect(Collectors.toList());
-
-		return (absences.size() != 0) ? ResponseEntity.ok(listeJourFerieDto)
-				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucun jours Fériés ou RTT employeur enregistrés"));
-	}
-
 	@PostMapping("create")
 	public ResponseEntity<?> creerAbsence(@RequestBody @Valid DtoCreerAbsenceRequest dtoRequest, BindingResult resValid)
 			throws CollegueIntrouvableException {
@@ -107,17 +94,34 @@ public class AbsenceController {
 		}
 	}
 
-	@PutMapping
-	public ResponseEntity<?> editAbsence(@RequestBody DtoCreerAbsenceRequest dtoAbsenceRequest) {
-		LocalDate dateDebutToLocalData = ConverterDate
-				.convertDateToLocalDate(dtoAbsenceRequest.getDatePremierJourAbsence());
-		LocalDate dateFinToLocalData = ConverterDate
-				.convertDateToLocalDate(dtoAbsenceRequest.getDateDernierJourAbsence());
-		Absence editAbsence = absenceService.updateAbsence(dtoAbsenceRequest.getIdCollegue(), dateDebutToLocalData,
-				dateFinToLocalData, ETypeJourAbsence.valueOf(dtoAbsenceRequest.getTypeConge()),
-				dtoAbsenceRequest.getCommentaireAbsence(),
-				EStatutDemandeAbsence.valueOf(dtoAbsenceRequest.getStatutDemande()));
+	@PutMapping("modifier")
+	public ResponseEntity<?> editAbsence(@RequestBody DtoUpdateAbsenceRequest dtoRequest)
+			throws CollegueIntrouvableException {
+
+		LocalDate dateDebutToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
+
+		LocalDate dateFinToLocalData = ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence());
+
+		Collegue collegueModifiantAbsence = this.collegueService.recupererCollegue(dtoRequest.getIdCollegue());
+
+		Absence absUpdated = new Absence(dtoRequest.getIdAbsence(), dateDebutToLocalData, dateFinToLocalData,
+				ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getCommentaireAbsence(),
+				EStatutDemandeAbsence.valueOf(dtoRequest.getStatutDemande()), collegueModifiantAbsence);
+
+		Absence editAbsence = absenceService.updateAbsence(absUpdated);
+
 		return ResponseEntity.ok(new DtoAbsenceResponse(editAbsence));
+	}
+  
+	@GetMapping("joursferies/{annee}")
+	public ResponseEntity<?> listerAllJoursFeriesEtRttEmployeur(@PathVariable Integer annee)
+			throws AbsenceIntrouvableException {
+		List<Absence> absences = this.absenceService.getAllRttEtJoursFeries(annee);
+		List<DtoJoursFerieResponse> listeJourFerieDto = absences.stream().map(abs -> new DtoJoursFerieResponse(abs))
+				.collect(Collectors.toList());
+
+		return (absences.size() != 0) ? ResponseEntity.ok(listeJourFerieDto)
+				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucun jours Fériés ou RTT employeur enregistrés"));
 	}
 
 }

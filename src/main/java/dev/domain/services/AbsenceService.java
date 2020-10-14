@@ -1,7 +1,6 @@
 package dev.domain.services;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +10,6 @@ import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
 import dev.domain.enums.ETypeJourAbsence;
-import dev.domain.exceptions.AbsenceIntrouvableException;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.repository.AbsenceRepo;
 import dev.repository.CollegueRepo;
@@ -88,15 +86,14 @@ public class AbsenceService {
 		return absenceRepo.findById(id);
 	}
 
-	public Absence updateAbsence(Long id, LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence,
-			ETypeJourAbsence typeConge, String commentaireAbsence, EStatutDemandeAbsence statut) {
-		Optional<Absence> absenceToUpdate = this.getById(id);
+	public Absence updateAbsence(Absence absUpdated) {
+		Optional<Absence> absenceToUpdate = this.getById(absUpdated.getId());
 		if (absenceToUpdate.isPresent()) {
-			absenceToUpdate.get().setDatePremierJourAbsence(datePremierJourAbsence);
-			absenceToUpdate.get().setDateDernierJourAbsence(dateDernierJourAbsence);
-			absenceToUpdate.get().setTypeConge(typeConge);
-			absenceToUpdate.get().setCommentaireAbsence(commentaireAbsence);
-			absenceToUpdate.get().setStatutDemandeAbsence(statut);
+			absenceToUpdate.get().setDatePremierJourAbsence(absUpdated.getDatePremierJourAbsence());
+			absenceToUpdate.get().setDateDernierJourAbsence(absUpdated.getDateDernierJourAbsence());
+			absenceToUpdate.get().setTypeConge(absUpdated.getTypeConge());
+			absenceToUpdate.get().setCommentaireAbsence(absUpdated.getCommentaireAbsence());
+			absenceToUpdate.get().setStatutDemandeAbsence(absUpdated.getStatutDemandeAbsence());
 		}
 		return absenceRepo.save(absenceToUpdate.get());
 	}
@@ -114,7 +111,8 @@ public class AbsenceService {
 		}
 
 	}
-
+  
+  
 	public List<Absence> getAllRttEtJoursFeries(Integer annee) throws AbsenceIntrouvableException {
 		Optional<List<Absence>> listAbsence = absenceRepo.findAllJoursFerieEtRttEmployeur();
 		List<Absence> listAbsenceAnnee = new ArrayList<Absence>();
@@ -131,4 +129,5 @@ public class AbsenceService {
 
 		return listAbsenceAnnee;
 	}
+
 }
