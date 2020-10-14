@@ -46,7 +46,7 @@ public class AbsenceController {
 		this.absenceService = absenceService;
 	}
 	
-	@GetMapping("validation")
+	@GetMapping("liste/en-attente")
 	public ResponseEntity<?> listeAbsenceEnAttente() {
 		Optional<List<Absence>> absencesEnAttente = this.absenceService.getAllAbsenceEnAttente();
 		if(absencesEnAttente.isPresent()) {
