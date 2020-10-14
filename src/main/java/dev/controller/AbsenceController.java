@@ -23,7 +23,6 @@ import dev.domain.dto.DtoAbsenceResponse;
 import dev.domain.dto.DtoAbsenceResponseBis;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
-import dev.domain.dto.DtoJoursFerieResponse;
 import dev.domain.dto.DtoUpdateAbsenceRequest;
 import dev.domain.dto.DtoUpdateAbsenceRequestBis;
 import dev.domain.dto.ErrorRequestException;
@@ -48,74 +47,66 @@ public class AbsenceController {
 		this.collegueService = collegueService;
 		this.absenceService = absenceService;
 	}
-	
+
 	@GetMapping("liste/en-attente")
 	public ResponseEntity<?> listeAbsenceEnAttente() {
 		Optional<List<Absence>> absencesEnAttente = this.absenceService.getAllAbsenceEnAttente();
-		if(absencesEnAttente.isPresent()) {
+		if (absencesEnAttente.isPresent()) {
 			List<Absence> absences = absencesEnAttente.get();
-			List<DtoAbsenceResponseBis> response = absences.stream().map(absence -> new DtoAbsenceResponseBis(
-																							absence.getId(), 
-																							absence.getDatePremierJourAbsence(), 
-																							absence.getDateDernierJourAbsence(), 
-																							absence.getTypeConge().toString(), 
-																							absence.getCollegue().getNom(), 
-																							absence.getCollegue().getPrenom()))
-																	.collect(Collectors.toList());
+			List<DtoAbsenceResponseBis> response = absences.stream()
+					.map(absence -> new DtoAbsenceResponseBis(absence.getId(), absence.getDatePremierJourAbsence(),
+							absence.getDateDernierJourAbsence(), absence.getTypeConge().toString(),
+							absence.getCollegue().getNom(), absence.getCollegue().getPrenom()))
+					.collect(Collectors.toList());
 
 			return ResponseEntity.ok(response);
 		} else {
 			return ResponseEntity.badRequest().body("Aucune absences existantes");
 		}
 	}
-	
+
 	@PutMapping("valider")
-	public ResponseEntity<?> valideAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
-		if(!resValid.hasErrors()) {
+	public ResponseEntity<?> valideAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence,
+			BindingResult resValid) {
+		if (!resValid.hasErrors()) {
 			Optional<Absence> absence = this.absenceService.getById(dtoUpdateAbsence.getIdAbsence());
-			if(absence.isPresent()) {
+			if (absence.isPresent()) {
 				Absence absenceRecuperee = absence.get();
-				Absence absenceModifie = this.absenceService.updateAbsence(new Absence( absenceRecuperee.getId(),  
-																						absenceRecuperee.getDatePremierJourAbsence(),
-																						absenceRecuperee.getDateDernierJourAbsence(),
-																						absenceRecuperee.getTypeConge(), 
-																						absenceRecuperee.getCommentaireAbsence(), 
-																						EStatutDemandeAbsence.VALIDEE, 
-																						absenceRecuperee.getCollegue()));
-				
+				Absence absenceModifie = this.absenceService.updateAbsence(new Absence(absenceRecuperee.getId(),
+						absenceRecuperee.getDatePremierJourAbsence(), absenceRecuperee.getDateDernierJourAbsence(),
+						absenceRecuperee.getTypeConge(), absenceRecuperee.getCommentaireAbsence(),
+						EStatutDemandeAbsence.VALIDEE, absenceRecuperee.getCollegue()));
+
 				return ResponseEntity.ok(new DtoAbsenceResponse(absenceModifie));
-				
-			}else {
+
+			} else {
 				return ResponseEntity.ok(new AbsenceIntrouvableException("Cette demande n'existe plus"));
 			}
 		} else {
 			return ResponseEntity.badRequest().body("Une errreur est survenue");
 		}
 	}
-	
-	
+
 	@PutMapping("rejeter")
-	public ResponseEntity<?> rejeterAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
-		if(!resValid.hasErrors()) {
+	public ResponseEntity<?> rejeterAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence,
+			BindingResult resValid) {
+		if (!resValid.hasErrors()) {
 			Optional<Absence> absence = this.absenceService.getById(dtoUpdateAbsence.getIdAbsence());
-			if(absence.isPresent()) {
+			if (absence.isPresent()) {
 				Absence absenceRecuperee = absence.get();
-				Absence absenceModifie = this.absenceService.updateAbsence(new Absence(absenceRecuperee.getId(),  
-																						absenceRecuperee.getDatePremierJourAbsence(),
-																						absenceRecuperee.getDateDernierJourAbsence(),
-																						absenceRecuperee.getTypeConge(), 
-																						absenceRecuperee.getCommentaireAbsence(), 
-																						EStatutDemandeAbsence.REJETEE, 
-																						absenceRecuperee.getCollegue()));
+				Absence absenceModifie = this.absenceService.updateAbsence(new Absence(absenceRecuperee.getId(),
+						absenceRecuperee.getDatePremierJourAbsence(), absenceRecuperee.getDateDernierJourAbsence(),
+						absenceRecuperee.getTypeConge(), absenceRecuperee.getCommentaireAbsence(),
+						EStatutDemandeAbsence.REJETEE, absenceRecuperee.getCollegue()));
 				return ResponseEntity.ok(new DtoAbsenceResponse(absenceModifie));
-			}else {
+			} else {
 				return ResponseEntity.ok(new AbsenceIntrouvableException("Cette demande n'existe plus"));
 			}
 		} else {
 			return ResponseEntity.badRequest().body(new ErrorRequestException("Une erreur est survenue"));
 		}
 	}
-	
+
 	@GetMapping("visualisation/user/{id}")
 	public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
 		List<Absence> absences = this.absenceService.getAbsencesByUser(id);
@@ -134,17 +125,6 @@ public class AbsenceController {
 
 		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
 				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
-	}
-
-	@GetMapping("joursferies/{annee}")
-	public ResponseEntity<?> listerAllJoursFeriesEtRttEmployeur(@PathVariable Integer annee)
-			throws AbsenceIntrouvableException {
-		List<Absence> absences = this.absenceService.getAllRttEtJoursFeries(annee);
-		List<DtoJoursFerieResponse> listeJourFerieDto = absences.stream().map(abs -> new DtoJoursFerieResponse(abs))
-				.collect(Collectors.toList());
-
-		return (absences.size() != 0) ? ResponseEntity.ok(listeJourFerieDto)
-				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucun jours Fériés ou RTT employeur enregistrés"));
 	}
 
 	@PostMapping("create")
@@ -182,17 +162,15 @@ public class AbsenceController {
 	public ResponseEntity<?> editAbsence(@RequestBody DtoUpdateAbsenceRequest dtoRequest)
 			throws CollegueIntrouvableException {
 		Optional<Absence> absence = this.absenceService.getById(dtoRequest.getIdAbsence());
-		
-		if(absence.isPresent()) {
+
+		if (absence.isPresent()) {
 			Absence absenceRecuperee = absence.get();
-			Absence absUpdated = new Absence(dtoRequest.getIdAbsence(), 
-											ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence()), 
-											ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence()),
-											ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), 
-											dtoRequest.getCommentaireAbsence(),
-											EStatutDemandeAbsence.valueOf(dtoRequest.getStatutDemande()), 
-											absenceRecuperee.getCollegue());
-			
+			Absence absUpdated = new Absence(dtoRequest.getIdAbsence(),
+					ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence()),
+					ConverterDate.convertDateToLocalDate(dtoRequest.getDateDernierJourAbsence()),
+					ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getCommentaireAbsence(),
+					EStatutDemandeAbsence.valueOf(dtoRequest.getStatutDemande()), absenceRecuperee.getCollegue());
+
 			Absence editAbsence = absenceService.updateAbsence(absUpdated);
 			return ResponseEntity.ok(new DtoAbsenceResponse(editAbsence));
 		} else {
@@ -201,4 +179,3 @@ public class AbsenceController {
 	}
 
 }
-

@@ -79,6 +79,10 @@ public class AbsenceService {
 		return this.absenceRepo.findAll();
 	}
 
+	public List<Absence> getAllJourFerieRTTByDate(LocalDate dateParam) {
+		return this.absenceRepo.findAbsenceJourFerieParDate(dateParam);
+	}
+
 	/**
 	 * 
 	 * @param id identifiant de l'absence recherchée
@@ -106,7 +110,7 @@ public class AbsenceService {
 
 	}
 
-	public List<Absence> getAllRttEtJoursFeries(Integer annee) throws AbsenceIntrouvableException {
+	public List<Absence> getAllRttEtJoursFeriesParAnnee(Integer annee) throws AbsenceIntrouvableException {
 		Optional<List<Absence>> listAbsence = absenceRepo.findAllJoursFerieEtRttEmployeur();
 		List<Absence> listAbsenceAnnee = new ArrayList<Absence>();
 
@@ -122,9 +126,8 @@ public class AbsenceService {
 
 		return listAbsenceAnnee;
 	}
-	
+
 	public Optional<List<Absence>> getAllAbsenceEnAttente() {
 		return this.absenceRepo.findByStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
 	}
 }
-

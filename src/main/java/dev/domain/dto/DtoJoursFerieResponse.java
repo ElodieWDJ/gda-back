@@ -8,16 +8,16 @@ import dev.utils.ConversionDateJours;
 public class DtoJoursFerieResponse {
 
 	long idCollegue;
-	LocalDate dateJourFerie;
-	String jourSemaine;
+	LocalDate datePremierJourAbsence;
+	String jourDeLaSemaine;
 	String typeConge;
 	String commentaireAbsence;
 	String statutDemande;
 
 	public DtoJoursFerieResponse(Absence abs) {
 		this.idCollegue = abs.getCollegue().getId();
-		this.dateJourFerie = abs.getDatePremierJourAbsence();
-		this.jourSemaine = ConversionDateJours.convertionDateJourSemaine(abs.getDatePremierJourAbsence());
+		this.datePremierJourAbsence = abs.getDatePremierJourAbsence();
+		this.jourDeLaSemaine = ConversionDateJours.convertionDateJourSemaine(abs.getDatePremierJourAbsence());
 		this.typeConge = abs.getTypeConge().toString();
 		this.commentaireAbsence = abs.getCommentaireAbsence();
 		this.statutDemande = abs.getStatutDemandeAbsence().toString();
@@ -29,14 +29,6 @@ public class DtoJoursFerieResponse {
 
 	public void setIdCollegue(long idCollegue) {
 		this.idCollegue = idCollegue;
-	}
-
-	public LocalDate getDateJourFerie() {
-		return dateJourFerie;
-	}
-
-	public void setDateJourFerie(LocalDate dateJourFerie) {
-		this.dateJourFerie = dateJourFerie;
 	}
 
 	public String getTypeConge() {
@@ -61,6 +53,22 @@ public class DtoJoursFerieResponse {
 
 	public void setStatutDemande(String statutDemande) {
 		this.statutDemande = statutDemande;
+	}
+
+	public LocalDate getDatePremierJourAbsence() {
+		return datePremierJourAbsence;
+	}
+
+	public void setDatePremierJourAbsence(LocalDate datePremierJourAbsence) {
+		this.datePremierJourAbsence = datePremierJourAbsence;
+	}
+
+	public String getJourDeLaSemaine() {
+		return jourDeLaSemaine;
+	}
+
+	public void setJourDeLaSemaine(String jourDeLaSemaine) {
+		this.jourDeLaSemaine = jourDeLaSemaine;
 	}
 
 }
