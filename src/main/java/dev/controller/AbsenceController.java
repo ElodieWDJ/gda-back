@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,6 +27,7 @@ import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
 import dev.domain.enums.ETypeJourAbsence;
+import dev.domain.exceptions.AbsenceIntrouvableException;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
@@ -61,6 +63,13 @@ public class AbsenceController {
 
 		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
 				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
+	}
+
+	@GetMapping("export")
+	public void exporterAbsenceExcel() throws AbsenceIntrouvableException {
+		List<Absence> absences = this.absenceService.getAllAbsence();
+		HSSFWorkbook workbook = new HSSFWorkbook();
+
 	}
 
 	@PostMapping("create")
