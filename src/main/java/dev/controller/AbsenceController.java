@@ -107,7 +107,6 @@ public class AbsenceController {
 																						absenceRecuperee.getCommentaireAbsence(), 
 																						EStatutDemandeAbsence.REJETEE, 
 																						absenceRecuperee.getCollegue()));
-				
 				return ResponseEntity.ok(new DtoAbsenceResponse(absenceModifie));
 			}else {
 				return ResponseEntity.ok(new AbsenceIntrouvableException("Cette demande n'existe plus"));
