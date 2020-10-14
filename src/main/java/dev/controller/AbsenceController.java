@@ -24,6 +24,7 @@ import dev.domain.dto.DtoAbsenceResponseBis;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
 import dev.domain.dto.DtoJoursFerieResponse;
+import dev.domain.dto.DtoUpdateAbsenceRequestBis;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
@@ -66,6 +67,35 @@ public class AbsenceController {
 		}
 	}
 	
+	@PostMapping("valider")
+	public ResponseEntity<?> valideAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
+		if(!resValid.hasErrors()) {
+			Absence absence = this.absenceService.updateAbsence(dtoUpdateAbsence.getIdAbsence(), 
+																ConverterDate.convertDateToLocalDate(dtoUpdateAbsence.getDatePremierJourAbsence()), 
+																ConverterDate.convertDateToLocalDate(dtoUpdateAbsence.getDateDernierJourAbsence()), 
+																ETypeJourAbsence.valueOf(dtoUpdateAbsence.getTypeConge()), 
+																dtoUpdateAbsence.getCommentaireAbsence(), 
+																EStatutDemandeAbsence.VALIDEE);
+			return ResponseEntity.ok(new DtoAbsenceResponse(absence));
+		} else {
+			return ResponseEntity.badRequest().body("Une errreur est survenue");
+		}
+	}
+	
+	@PostMapping("rejeter")
+	public ResponseEntity<?> rejeterAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
+		if(!resValid.hasErrors()) {
+			Absence absence = this.absenceService.updateAbsence(dtoUpdateAbsence.getIdAbsence(), 
+																ConverterDate.convertDateToLocalDate(dtoUpdateAbsence.getDatePremierJourAbsence()), 
+																ConverterDate.convertDateToLocalDate(dtoUpdateAbsence.getDateDernierJourAbsence()), 
+																ETypeJourAbsence.valueOf(dtoUpdateAbsence.getTypeConge()), 
+																dtoUpdateAbsence.getCommentaireAbsence(), 
+																EStatutDemandeAbsence.REJETEE);
+			return ResponseEntity.ok(new DtoAbsenceResponse(absence));
+		} else {
+			return ResponseEntity.badRequest().body("Une errreur est survenue");
+		}
+	}
 	
 	@GetMapping("visualisation/user/{id}")
 	public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
