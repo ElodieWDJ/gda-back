@@ -2,6 +2,7 @@ package dev.domain.services;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,7 @@ public class AbsenceService {
 		return controleValide;
 	}
 
+	
 	private boolean checkerDate(LocalDate dateDebut, LocalDate dateFin, Absence absence) {
 		if (dateDebut.isBefore(absence.getDatePremierJourAbsence())
 				&& dateFin.isBefore(absence.getDateDernierJourAbsence())
@@ -126,5 +128,11 @@ public class AbsenceService {
 	public Optional<List<Absence>> getAllAbsenceEnAttente() {
 		return this.absenceRepo.findByStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
 	}
+	
+	public Optional<List<Absence>> getAllAbsenceValidee() {
+		return this.absenceRepo.findByStatutDemandeAbsence(EStatutDemandeAbsence.VALIDEE);
+	}
+	
+	
 }
 

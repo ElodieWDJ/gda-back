@@ -69,6 +69,27 @@ public class AbsenceController {
 		}
 	}
 	
+	@GetMapping("liste/valider")
+	public ResponseEntity<?> listeAbsenceValidee() {
+		Optional<List<Absence>> absencesEnAttente = this.absenceService.getAllAbsenceEnAttente();
+		if(absencesEnAttente.isPresent()) {
+			List<Absence> absences = absencesEnAttente.get();
+			List<DtoAbsenceResponseBis> response = absences.stream().map(absence -> new DtoAbsenceResponseBis(
+																							absence.getId(), 
+																							absence.getDatePremierJourAbsence(), 
+																							absence.getDateDernierJourAbsence(), 
+																							absence.getTypeConge().toString(), 
+																							absence.getCollegue().getNom(), 
+																							absence.getCollegue().getPrenom()))
+																	.collect(Collectors.toList());
+
+			return ResponseEntity.ok(response);
+		} else {
+			return ResponseEntity.badRequest().body("Aucune absences existantes");
+		}
+	}
+	
+	
 	@PutMapping("valider")
 	public ResponseEntity<?> valideAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
 		if(!resValid.hasErrors()) {
@@ -125,6 +146,8 @@ public class AbsenceController {
 		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
 				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
 	}
+	
+	
 
 	@GetMapping("all")
 	public ResponseEntity<?> listerAllAbsences() throws CollegueIntrouvableException {
