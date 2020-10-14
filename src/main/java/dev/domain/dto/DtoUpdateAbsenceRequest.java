@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class DtoUpdateAbsenceRequest {
 
+	long idAbsence;
 	long idCollegue;
 	static Date datePremierJourAbsence;
 	static Date dateDernierJourAbsence;
@@ -16,6 +17,14 @@ public class DtoUpdateAbsenceRequest {
 	 */
 	public long getIdCollegue() {
 		return idCollegue;
+	}
+
+	public long getIdAbsence() {
+		return idAbsence;
+	}
+
+	public void setIdAbsence(long idAbsence) {
+		this.idAbsence = idAbsence;
 	}
 
 	/**
