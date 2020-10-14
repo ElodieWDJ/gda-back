@@ -1,6 +1,7 @@
 package dev.domain.services;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,6 +11,7 @@ import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
 import dev.domain.enums.ETypeJourAbsence;
+import dev.domain.exceptions.AbsenceIntrouvableException;
 import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.repository.AbsenceRepo;
 import dev.repository.CollegueRepo;
@@ -87,15 +89,7 @@ public class AbsenceService {
 	}
 
 	public Absence updateAbsence(Absence absUpdated) {
-		Optional<Absence> absenceToUpdate = this.getById(absUpdated.getId());
-		if (absenceToUpdate.isPresent()) {
-			absenceToUpdate.get().setDatePremierJourAbsence(absUpdated.getDatePremierJourAbsence());
-			absenceToUpdate.get().setDateDernierJourAbsence(absUpdated.getDateDernierJourAbsence());
-			absenceToUpdate.get().setTypeConge(absUpdated.getTypeConge());
-			absenceToUpdate.get().setCommentaireAbsence(absUpdated.getCommentaireAbsence());
-			absenceToUpdate.get().setStatutDemandeAbsence(absUpdated.getStatutDemandeAbsence());
-		}
-		return absenceRepo.save(absenceToUpdate.get());
+		return absenceRepo.save(absUpdated);
 	}
 
 	public List<Absence> getAbsencesByUser(Long id) throws CollegueIntrouvableException {
@@ -112,4 +106,25 @@ public class AbsenceService {
 
 	}
 
+	public List<Absence> getAllRttEtJoursFeries(Integer annee) throws AbsenceIntrouvableException {
+		Optional<List<Absence>> listAbsence = absenceRepo.findAllJoursFerieEtRttEmployeur();
+		List<Absence> listAbsenceAnnee = new ArrayList<Absence>();
+
+		if (listAbsence.isPresent()) {
+			for (Absence absence : listAbsence.get()) {
+				if (absence.getDateDernierJourAbsence().getYear() == annee) {
+					listAbsenceAnnee.add(absence);
+				}
+			}
+		} else {
+			throw new AbsenceIntrouvableException("Pas de RTT ou de Jours feriés cette année");
+		}
+
+		return listAbsenceAnnee;
+	}
+	
+	public Optional<List<Absence>> getAllAbsenceEnAttente() {
+		return this.absenceRepo.findByStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
+	}
 }
+
