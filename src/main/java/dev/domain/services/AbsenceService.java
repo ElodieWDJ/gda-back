@@ -131,4 +131,8 @@ public class AbsenceService {
 
 		return listAbsenceAnnee;
 	}
+	
+	public Optional<List<Absence>> getAllAbsenceEnAttente() {
+		return this.absenceRepo.findByStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
+	}
 }

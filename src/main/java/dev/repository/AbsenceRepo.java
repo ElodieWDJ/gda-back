@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import dev.domain.entite.Absence;
+import dev.domain.enums.EStatutDemandeAbsence;
 
 public interface AbsenceRepo extends JpaRepository<Absence, Long> {
 
@@ -16,5 +17,6 @@ public interface AbsenceRepo extends JpaRepository<Absence, Long> {
 
 	@Query("select a from Absence a where a.typeConge='RTT_EMPLOYEUR' OR a.typeConge='JOUR_FERIE'")
 	Optional<List<Absence>> findAllJoursFerieEtRttEmployeur();
-
+	
+	Optional<List<Absence>> findByStatutDemandeAbsence(EStatutDemandeAbsence statutDemandeAbsence);
 }
