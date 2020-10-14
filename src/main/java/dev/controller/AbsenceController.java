@@ -24,6 +24,7 @@ import dev.domain.dto.DtoAbsenceResponseBis;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
 import dev.domain.dto.DtoJoursFerieResponse;
+import dev.domain.dto.DtoUpdateAbsenceRequest;
 import dev.domain.dto.DtoUpdateAbsenceRequestBis;
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
@@ -82,7 +83,7 @@ public class AbsenceController {
 		}
 	}
 	
-	@PostMapping("rejeter")
+	@PutMapping("rejeter")
 	public ResponseEntity<?> rejeterAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence, BindingResult resValid) {
 		if(!resValid.hasErrors()) {
 			Absence absence = this.absenceService.updateAbsence(dtoUpdateAbsence.getIdAbsence(), 
@@ -160,7 +161,7 @@ public class AbsenceController {
 	}
 
 	@PutMapping
-	public ResponseEntity<?> editAbsence(@RequestBody DtoCreerAbsenceRequest dtoAbsenceRequest) {
+	public ResponseEntity<?> editAbsence(@RequestBody DtoUpdateAbsenceRequest dtoAbsenceRequest) {
 		LocalDate dateDebutToLocalData = ConverterDate
 				.convertDateToLocalDate(dtoAbsenceRequest.getDatePremierJourAbsence());
 		LocalDate dateFinToLocalData = ConverterDate
