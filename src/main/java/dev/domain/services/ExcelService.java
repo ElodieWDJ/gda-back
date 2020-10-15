@@ -29,13 +29,13 @@ public class ExcelService {
 		HSSFWorkbook classeurExcel = new HSSFWorkbook();
 		List<Absence> listabsence = absenceRepo.findAll();
 		CellStyle styleCelluleEntête = CreationFichierExcel.styleCelluleEnTeteClasseurExcel(classeurExcel);
-		int indexLigne = 1;
+		Integer indexLigne = 0;
 
 		// ----------------Creation du classeur onglet, ligne, cellule
 		// vide----------------
 
 		HSSFSheet ongletAbsence = classeurExcel.createSheet("ABSENCE");
-		HSSFRow ligneIndice = ongletAbsence.createRow(0);
+		HSSFRow ligneIndice = ongletAbsence.createRow(indexLigne);
 		HSSFCell cellule;
 
 		// ----------------On applique le styleCelluleEntête à toute les cellules de la
@@ -70,27 +70,38 @@ public class ExcelService {
 		// ----------------Remplissage des cellules du tableau ligne par
 		// ligne----------------
 
-		for (Absence abs : listabsence) {
+		if (listabsence.size() != 0) {
+			for (Absence abs : listabsence) {
 
-			ligneIndice = ongletAbsence.createRow(indexLigne++);
+				indexLigne = indexLigne + 1;
 
-			cellule = CreationFichierExcel.creationCelluleExcel(ongletAbsence, indexLigne, 0, abs.getId().toString());
-			cellule = CreationFichierExcel.creationCelluleExcel(ongletAbsence, indexLigne, 1,
-					abs.getDatePremierJourAbsence().toString());
-			cellule = CreationFichierExcel.creationCelluleExcel(ongletAbsence, indexLigne, 2,
-					abs.getDateDernierJourAbsence().toString());
-			cellule = CreationFichierExcel.creationCelluleExcel(ongletAbsence, indexLigne, 3,
-					abs.getTypeConge().toString());
-			cellule = CreationFichierExcel.creationCelluleExcel(ongletAbsence, indexLigne, 4,
-					abs.getCommentaireAbsence());
-			cellule = CreationFichierExcel.creationCelluleExcel(ongletAbsence, indexLigne, 5,
-					abs.getStatutDemandeAbsence().toString());
-			cellule = CreationFichierExcel.creationCelluleExcel(ongletAbsence, indexLigne, 6,
-					abs.getCollegue().toString());
+				ligneIndice = ongletAbsence.createRow(indexLigne);
 
+				cellule = ligneIndice.createCell(0);
+				cellule.setCellValue(abs.getId().toString());
+
+				cellule = ligneIndice.createCell(1);
+				cellule.setCellValue(abs.getDatePremierJourAbsence().toString());
+
+				cellule = ligneIndice.createCell(2);
+				cellule.setCellValue(abs.getDateDernierJourAbsence().toString());
+
+				cellule = ligneIndice.createCell(3);
+				cellule.setCellValue(abs.getTypeConge().toString());
+
+				cellule = ligneIndice.createCell(4);
+				cellule.setCellValue(abs.getCommentaireAbsence().toString());
+
+				cellule = ligneIndice.createCell(5);
+				cellule.setCellValue(abs.getStatutDemandeAbsence().toString());
+
+				cellule = ligneIndice.createCell(6);
+				cellule.setCellValue(abs.getCollegue().toString());
+
+			}
+		} else {
+			throw new AbsenceIntrouvableException("Pas d'absence correspondant à cet Id.");
 		}
-
 		return classeurExcel;
 	}
-
 }
