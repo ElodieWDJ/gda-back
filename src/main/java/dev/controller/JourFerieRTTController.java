@@ -110,20 +110,51 @@ public class JourFerieRTTController {
 		}
 	}
 
+	/* ----------------- SUPPRIMER -------------------- */
+
+	@PutMapping("supprimer")
+	public ResponseEntity<?> deleteJourFerieRTT(@RequestBody DtoUpdateJourFerieRttRequest dtoRequest)
+			throws CollegueIntrouvableException {
+
+		LocalDate dateACherche = ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence());
+
+		List<Absence> listAbsence = this.absenceService.getAllJourFerieRTTByDate(dateACherche);
+
+		if (listAbsence.size() > 0) {
+			for (Absence absFromListe : listAbsence) {
+
+				Absence absUpdated = new Absence(absFromListe.getId(),
+						ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence()),
+						ConverterDate.convertDateToLocalDate(dtoRequest.getDatePremierJourAbsence()),
+						ETypeJourAbsence.valueOf(dtoRequest.getTypeConge()), dtoRequest.getCommentaireAbsence(),
+						absFromListe.getStatutDemandeAbsence(), absFromListe.getCollegue());
+
+				boolean absenceDeleted = absenceService.supprimerAbsence(absUpdated);
+			}
+			return ResponseEntity.ok("RTT/Jour Férié supprimé.");
+		} else {
+			return ResponseEntity.ok(new AbsenceIntrouvableException(
+					"Ce jour férié/RTT n'existe pas et ne peut donc pas être supprimé"));
+		}
+	}
+
 	/* ----------------- LISTER -------------------- */
 
 	@GetMapping("joursferies/{annee}")
 	public ResponseEntity<?> listerAllJoursFeriesEtRttEmployeur(@PathVariable Integer annee)
 			throws AbsenceIntrouvableException {
+
 		List<Absence> allAbsences = this.absenceService.getAllRttEtJoursFeriesParAnnee(annee);
 		List<Absence> absencesFiltre = new ArrayList();
 
 		// Filtrage des absences pour obtenir seulement les JF/RTT uniques, on filtre
 		// par date qui sont order par ordre croissant
+
+		LocalDate dateTampon = LocalDate.of(2000, 1, 1); // Date par défaut , elle aurait pu être vide
 		for (Absence abs : allAbsences) {
-			LocalDate dateTampon = LocalDate.of(2000, 1, 1); // Date par défaut , elle aurait pu être vide
-			if (abs.getDatePremierJourAbsence() != dateTampon) {
+			if (!abs.getDatePremierJourAbsence().equals(dateTampon)) {
 				absencesFiltre.add(abs);
+				dateTampon = abs.getDatePremierJourAbsence();
 			}
 		}
 

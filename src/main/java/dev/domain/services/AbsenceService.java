@@ -38,8 +38,25 @@ public class AbsenceService {
 
 		this.collegueRepo.save(collegue);
 		return this.absenceRepo.save(newAbsence);
+
 	}
-	// retourne une liste d'objet de ttes les absences
+
+	public boolean supprimerAbsence(Absence absenceASupprimer) {
+
+		boolean retour = false;
+
+		if (absenceRepo.findById(absenceASupprimer.getId()).isEmpty()) { // On check si l'absence à supprimer existe
+			return retour;
+		} else {
+			absenceRepo.delete(absenceASupprimer);
+
+			if (absenceRepo.findById(absenceASupprimer.getId()).isEmpty()) { // On Check si l'absence existe après la
+																				// suppression supposée
+				retour = true;
+			}
+		}
+		return retour;
+	}
 
 	public boolean controleChevaucheDate(LocalDate dateDebut, LocalDate dateFin, Collegue collegue) {
 		List<Absence> absences = collegue.getListeAbsencesDuCollegue();
