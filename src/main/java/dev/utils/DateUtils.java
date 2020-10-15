@@ -49,7 +49,11 @@ public class DateUtils {
 			
 	);
 			
-			
+	public static LocalDate getLastDateOfMonth(String moisSelectionne, String anneeSelectionne) throws ParseException {
+		Date dateMaxDuMois = DateUtils.getLastDayOfMonth(anneeSelectionne, moisSelectionne);
+		return DateUtils.convertDateToLocalDate(dateMaxDuMois);
+	}
+	
 	public static LocalDate convertDateToLocalDate(Date date) {
 		 return Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
 	}		
@@ -63,9 +67,9 @@ public class DateUtils {
 		return DateUtils.moisCalendarConversion.get(integerEnAnglais);
 	}
 	
-	public Date getLastDayOfMonth(String annee, String mois) throws ParseException {
+	public static Date getLastDayOfMonth(String annee, String mois) throws ParseException {
 		String moisEnChiffre = DateUtils.monthToConversion(mois);
-		String jourMaxDuMois = this.getNombreJourMaxParMois(Integer.parseInt(moisEnChiffre));
+		String jourMaxDuMois = DateUtils.getNombreJourMaxParMois(Integer.parseInt(moisEnChiffre));
 		if(jourMaxDuMois.length() > 2) {
 			String jourMaxDuMoisFormat = jourMaxDuMois.subSequence(1, jourMaxDuMois.length()).toString();
 			return new SimpleDateFormat("dd/MM/yyyy").parse(jourMaxDuMoisFormat + "/" + moisEnChiffre + "/" + annee);
@@ -74,7 +78,7 @@ public class DateUtils {
 		}
 	}
 	
-	private String getNombreJourMaxParMois(Integer mois) {
+	private static String getNombreJourMaxParMois(Integer mois) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH,  mois);
 		return String.format("%03d", cal.getActualMaximum(Calendar.DAY_OF_MONTH));

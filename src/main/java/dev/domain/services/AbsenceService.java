@@ -137,6 +137,10 @@ public class AbsenceService {
 		return this.absenceRepo.findByStatutDemandeAbsence(EStatutDemandeAbsence.VALIDEE);
 	}
 	
-	
+	public Optional<List<Absence>> getAllAbsenceValideByInterval(LocalDate dateDebut, LocalDate dateFin) {
+		return this.absenceRepo.findByStatutDemandeAbsenceAndDatePremierJourAbsenceGreaterThanEqualAndDateDernierJourAbsenceLessThan(EStatutDemandeAbsence.VALIDEE, 
+																																	dateDebut, 
+																																	dateFin);
+	}
 }
 

@@ -20,5 +20,6 @@ public interface AbsenceRepo extends JpaRepository<Absence, Long> {
 	
 	Optional<List<Absence>> findByDatePremierJourAbsenceGreaterThanEqualAndDateDernierJourAbsenceLessThan(LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence);
 	Optional<List<Absence>> findByStatutDemandeAbsence(EStatutDemandeAbsence statutDemandeAbsence);
+	Optional<List<Absence>> findByStatutDemandeAbsenceAndDatePremierJourAbsenceGreaterThanEqualAndDateDernierJourAbsenceLessThan(EStatutDemandeAbsence statutDemandeAbsence, LocalDate datePremierJourAbsence, LocalDate dateDernierJourAbsence);
 }
 
