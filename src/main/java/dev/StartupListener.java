@@ -124,9 +124,42 @@ public class StartupListener {
 		absence1.setStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
 		absence1.setCollegue(col5);
 		this.absenceRepo.save(absence1);
+		
+		Absence absence2 = new Absence();
+		absence2.setDatePremierJourAbsence(LocalDate.of(2020, Month.MARCH, 1));
+		absence2.setDateDernierJourAbsence(LocalDate.of(2020, Month.MARCH, 2));
+		absence2.setTypeConge(ETypeJourAbsence.RTT);
+		//absence1.setListeJourAbsence(listeTest);
+		absence2.setCommentaireAbsence("Test absence");
+		absence2.setStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
+		absence2.setCollegue(col5);
+		this.absenceRepo.save(absence2);
+		
+		Absence absence3 = new Absence();
+		absence3.setDatePremierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 1));
+		absence3.setDateDernierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 2));
+		absence3.setTypeConge(ETypeJourAbsence.RTT_EMPLOYEUR);
+		//absence1.setListeJourAbsence(listeTest);
+		absence3.setCommentaireAbsence("Test absence");
+		absence3.setStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
+		absence3.setCollegue(col5);
+		this.absenceRepo.save(absence3);
+		
+		Absence absence4 = new Absence();
+		absence4.setDatePremierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 1));
+		absence4.setDateDernierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 2));
+		absence4.setTypeConge(ETypeJourAbsence.RTT_EMPLOYEUR);
+		//absence1.setListeJourAbsence(listeTest);
+		absence4.setCommentaireAbsence("Test absence");
+		absence4.setStatutDemandeAbsence(EStatutDemandeAbsence.INITIALE);
+		absence4.setCollegue(col5);
+		this.absenceRepo.save(absence4);
 
 		List<Absence> listeAbsence = new ArrayList();
 		listeAbsence.add(absence1);
+		listeAbsence.add(absence2);
+		listeAbsence.add(absence3);
+		listeAbsence.add(absence4);
 		col5.setListeAbsencesDuCollegue(listeAbsence);
 		this.collegueRepo.save(col5);
 	}
