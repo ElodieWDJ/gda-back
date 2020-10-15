@@ -21,6 +21,10 @@ public class CollegueService {
 		this.collegueRepo = collegueRepo;
 	}
 
+	public List<Collegue> getAllCollegues() {
+		return this.collegueRepo.findAll();
+	}
+
 	public List<Absence> getAllAbsences(Long id) throws CollegueIntrouvableException {
 		Collegue collegue = this.recupererCollegue(id);
 		return collegue.getListeAbsencesDuCollegue();
@@ -28,7 +32,7 @@ public class CollegueService {
 
 	public Collegue recupererCollegue(Long id) throws CollegueIntrouvableException {
 		Optional<Collegue> collegue = this.collegueRepo.findById(id);
-		
+
 		if (collegue.isPresent()) {
 			return collegue.get();
 		} else {
@@ -45,30 +49,30 @@ public class CollegueService {
 		}
 
 	}
-	
+
 	public Integer getNbJourCongeRestant(Absence absence) {
-		Integer nbJourParAbsence =  null;
+		Integer nbJourParAbsence = null;
 		Integer nbJourRestant = null;
 		// initialise pour switcher de localdate en date
 		ZoneId defaultZoneId = ZoneId.systemDefault();
 		Collegue collegue = new Collegue();
-		
-	try {
-		LocalDate dateAvant = absence.getDatePremierJourAbsence();
-		System.out.println("test : " + dateAvant);
-		LocalDate dateApres = absence.getDateDernierJourAbsence();
-		// passage du LocalDate en Date
-		Date date1 = Date.from(dateAvant.atStartOfDay(defaultZoneId).toInstant());
-	
-		Date date2 = Date.from(dateApres.atStartOfDay(defaultZoneId).toInstant());
-		
-		// passage du long en Integer
-		Long dateApresSoustraction = Math.abs(date2.getTime() - date1.getTime());
-		// compte les bites
-		nbJourParAbsence = dateApresSoustraction.bitCount(dateApresSoustraction);
-		// nbJourRestant = collegue.getSoldesVacances()-nbJourParAbsence;
-		
-		} catch(Exception e) {
+
+		try {
+			LocalDate dateAvant = absence.getDatePremierJourAbsence();
+			System.out.println("test : " + dateAvant);
+			LocalDate dateApres = absence.getDateDernierJourAbsence();
+			// passage du LocalDate en Date
+			Date date1 = Date.from(dateAvant.atStartOfDay(defaultZoneId).toInstant());
+
+			Date date2 = Date.from(dateApres.atStartOfDay(defaultZoneId).toInstant());
+
+			// passage du long en Integer
+			Long dateApresSoustraction = Math.abs(date2.getTime() - date1.getTime());
+			// compte les bites
+			nbJourParAbsence = dateApresSoustraction.bitCount(dateApresSoustraction);
+			// nbJourRestant = collegue.getSoldesVacances()-nbJourParAbsence;
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return nbJourRestant;
