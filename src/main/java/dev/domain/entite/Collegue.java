@@ -111,4 +111,8 @@ public class Collegue {
 		this.prenom = prenom;
 	}
 
+	@Override
+	public String toString() {
+		return "Collegue [nom=" + nom + "]";
+	}
 }
