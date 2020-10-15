@@ -62,7 +62,8 @@ public class DateUtils {
 		String moisEnChiffre = DateUtils.monthToConversion(mois);
 		return LocalDate.parse(annee + "-" + moisEnChiffre + "-" + jour);
 	}
-	private static String monthToConversion(String mois) {
+	public static String monthToConversion(String mois) {
+		System.out.println("avant bug " + mois);
 		Integer integerEnAnglais = DateUtils.moisCalendarRelation.get(EMois.valueOf(mois));
 		return DateUtils.moisCalendarConversion.get(integerEnAnglais);
 	}
@@ -78,7 +79,7 @@ public class DateUtils {
 		}
 	}
 	
-	private static String getNombreJourMaxParMois(Integer mois) {
+	public static String getNombreJourMaxParMois(Integer mois) {
 		Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH,  mois);
 		return String.format("%03d", cal.getActualMaximum(Calendar.DAY_OF_MONTH));

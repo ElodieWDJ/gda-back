@@ -141,17 +141,17 @@ public class StartupListener {
 		absence3.setTypeConge(ETypeJourAbsence.RTT_EMPLOYEUR);
 		//absence1.setListeJourAbsence(listeTest);
 		absence3.setCommentaireAbsence("Test absence");
-		absence3.setStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
+		absence3.setStatutDemandeAbsence(EStatutDemandeAbsence.VALIDEE);
 		absence3.setCollegue(col5);
 		this.absenceRepo.save(absence3);
 		
 		Absence absence4 = new Absence();
-		absence4.setDatePremierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 1));
-		absence4.setDateDernierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 2));
+		absence4.setDatePremierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 3));
+		absence4.setDateDernierJourAbsence(LocalDate.of(2020, Month.FEBRUARY, 4));
 		absence4.setTypeConge(ETypeJourAbsence.RTT_EMPLOYEUR);
 		//absence1.setListeJourAbsence(listeTest);
 		absence4.setCommentaireAbsence("Test absence");
-		absence4.setStatutDemandeAbsence(EStatutDemandeAbsence.INITIALE);
+		absence4.setStatutDemandeAbsence(EStatutDemandeAbsence.VALIDEE);
 		absence4.setCollegue(col5);
 		this.absenceRepo.save(absence4);
 

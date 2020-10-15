@@ -21,6 +21,7 @@ import dev.domain.entite.Absence;
 import dev.domain.exceptions.AbsenceIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.VueSynthetiqueService;
+import dev.utils.DateUtils;
 
 @RestController
 @RequestMapping("vueSynthetique")
@@ -38,7 +39,9 @@ public class VueSynthetiqueController {
 		if(!resValid.hasErrors()) {
 			Optional<List<Absence>> absenceValider = this.vueSynthetiqueService.listeAbsenceValideByInterval(dtoRequest.getMois(), dtoRequest.getAnnee());
 			if(absenceValider.isPresent()) {
-				List<DtoCalendrierSynthetiqueResponse> response = absenceValider.get().stream().map(absence -> new DtoCalendrierSynthetiqueResponse(absence)).collect(Collectors.toList());
+				String moisEnChiffre = DateUtils.monthToConversion(dtoRequest.getMois());
+				Integer jourMaxDuMois = Integer.parseInt(DateUtils.getNombreJourMaxParMois(Integer.parseInt(moisEnChiffre)));
+				List<DtoCalendrierSynthetiqueResponse> response = absenceValider.get().stream().map(absence -> new DtoCalendrierSynthetiqueResponse(absence, jourMaxDuMois)).collect(Collectors.toList());
 				
 				return ResponseEntity.ok(response);
 			}else {

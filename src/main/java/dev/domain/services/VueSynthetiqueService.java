@@ -25,7 +25,7 @@ public class VueSynthetiqueService {
 	
 	public Optional<List<Absence>> listeAbsenceValideByInterval(String moisSelectionne, String anneeSelectionne) throws ParseException {
 		LocalDate dateDebut = DateUtils.convertStringToLocalDate("01", moisSelectionne, anneeSelectionne);
-		LocalDate dateFinDuMois = DateUtils.getLastDateOfMonth(anneeSelectionne, moisSelectionne);
+		LocalDate dateFinDuMois = DateUtils.getLastDateOfMonth(moisSelectionne , anneeSelectionne);
 		
 		return this.absenceService.getAllAbsenceValideByInterval(dateDebut, dateFinDuMois);
 	}
