@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 import javax.validation.Valid;
 
@@ -177,5 +178,13 @@ public class AbsenceController {
 			return ResponseEntity.ok(new AbsenceIntrouvableException("Cette Absence n'existe plus"));
 		}
 	}
+  
+  	@GetMapping("export")
+	public void exporterAbsenceExcel() throws AbsenceIntrouvableException {
+		List<Absence> absences = this.absenceService.getAllAbsence();
+		HSSFWorkbook workbook = new HSSFWorkbook();
+
+	}
 
 }
+
