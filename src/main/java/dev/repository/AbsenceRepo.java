@@ -23,4 +23,7 @@ public interface AbsenceRepo extends JpaRepository<Absence, Long> {
 
 	@Query("select a from Absence a where a.typeConge='RTT_EMPLOYEUR' OR a.typeConge='JOUR_FERIE' AND a.datePremierJourAbsence=:dateParamRequete")
 	List<Absence> findAbsenceJourFerieParDate(@Param("dateParamRequete") LocalDate dateDuJourFerie);
+
+	@Query("select count (a) from Absence a where :dateParamRequete between a.datePremierJourAbsence and a.dateDernierJourAbsence ")
+	int countAbsencesPourDateDonnee(@Param("dateParamRequete") LocalDate dateDuJourDuComptage);
 }
