@@ -113,6 +113,6 @@ public class Collegue {
 
 	@Override
 	public String toString() {
-		return "Collegue [nom=" + nom + "]";
+		return  nom;
 	}
 }
