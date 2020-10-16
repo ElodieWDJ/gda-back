@@ -45,12 +45,12 @@ public class AbsenceService {
 
 		boolean retour = false;
 
-		if (absenceRepo.findById(absenceASupprimer.getId()).isEmpty()) { // On check si l'absence à supprimer existe
+		if (!absenceRepo.findById(absenceASupprimer.getId()).isPresent()) { // On check si l'absence à supprimer existe
 			return retour;
 		} else {
 			absenceRepo.delete(absenceASupprimer);
 
-			if (absenceRepo.findById(absenceASupprimer.getId()).isEmpty()) { // On Check si l'absence existe après la
+			if (!absenceRepo.findById(absenceASupprimer.getId()).isPresent()) { // On Check si l'absence existe après la
 																				// suppression supposée
 				retour = true;
 			}
