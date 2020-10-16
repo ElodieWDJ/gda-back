@@ -40,6 +40,7 @@ public class VueSynthetiqueController {
 		super();
 		this.collegueService = collegueService;
 		this.absenceService = absenceService;
+		this.vueSynthetiqueService = vueSynthetiqueService;
 	}
 
 	/* ----------------- HISTOGRAMME -------------------- */
