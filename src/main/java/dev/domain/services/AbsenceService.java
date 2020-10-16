@@ -147,4 +147,9 @@ public class AbsenceService {
 	public Optional<List<Absence>> getAllAbsenceEnAttente() {
 		return this.absenceRepo.findByStatutDemandeAbsence(EStatutDemandeAbsence.EN_ATTENTE_VALIDATION);
 	}
+
+	public int compterLesAbsencesParDate(LocalDate dateDuJour) {
+		return this.absenceRepo.countAbsencesPourDateDonnee(dateDuJour);
+	}
+
 }
