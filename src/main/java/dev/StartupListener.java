@@ -230,7 +230,7 @@ public class StartupListener {
 		j22.setDateDuJour(LocalDate.of(2021, Month.MARCH, 12));
 		j22.setCommentaire("Jours des salariés");
 		this.jourAbsenceRepo.save(j22);
-		System.out.println("lol");
+
 		List<JourAbsence> listeTest = new ArrayList<JourAbsence>();
 		listeTest.add(j1);
 		listeTest.add(j2);
