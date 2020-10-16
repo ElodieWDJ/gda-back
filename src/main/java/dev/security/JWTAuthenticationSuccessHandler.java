@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -77,17 +78,17 @@ public class JWTAuthenticationSuccessHandler extends SimpleUrlAuthenticationSucc
 				.setExpiration(new Date(System.currentTimeMillis() + EXPIRES_IN * 1000))
 				.signWith(io.jsonwebtoken.SignatureAlgorithm.HS512, SECRET).compact();
 
-//        Cookie authCookie = new Cookie(TOKEN_COOKIE, (jws));
-//        authCookie.setHttpOnly(true);
-//        authCookie.setMaxAge(EXPIRES_IN * 1000);
-//        authCookie.setPath("/");
-//        response.addCookie(authCookie);
-//        LOG.info("Token JWT généré posé dans un cookie et en entête HTTP");
+        Cookie authCookie = new Cookie(TOKEN_COOKIE, (jws));
+        authCookie.setHttpOnly(true);
+        authCookie.setMaxAge(EXPIRES_IN * 1000);
+        authCookie.setPath("/");
+        response.addCookie(authCookie);
+        LOG.info("Token JWT généré posé dans un cookie et en entête HTTP");
 
-		ResponseCookie responseCookie = ResponseCookie.from(TOKEN_COOKIE, jws).httpOnly(true).maxAge(EXPIRES_IN * 1000)
-				.path("/").secure(true).sameSite("None").build();
-		response.setHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
-		LOG.info("Token JWT généré posé dans un cookie et en entête HTTP");
+//		ResponseCookie responseCookie = ResponseCookie.from(TOKEN_COOKIE, jws).httpOnly(true).maxAge(EXPIRES_IN * 1000)
+//				.path("/").secure(true).sameSite("None").build();
+//		response.setHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+//		LOG.info("Token JWT généré posé dans un cookie et en entête HTTP");
 
 	}
 }
