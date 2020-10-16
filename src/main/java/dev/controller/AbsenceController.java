@@ -1,5 +1,6 @@
 package dev.controller;
 
+import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,9 +25,16 @@ import dev.domain.dto.DtoAbsenceResponse;
 import dev.domain.dto.DtoAbsenceResponseBis;
 import dev.domain.dto.DtoAucuneAbsenceResponse;
 import dev.domain.dto.DtoCreerAbsenceRequest;
+
+import dev.domain.dto.DtoJoursFerieResponse;
+
 import dev.domain.dto.DtoUpdateAbsenceRequest;
 import dev.domain.dto.DtoUpdateAbsenceRequestBis;
 import dev.domain.dto.ErrorRequestException;
+
+import dev.domain.dto.DtoHistogrammeRequest;
+import dev.domain.dto.DtoHistogrammeResponse;
+
 import dev.domain.entite.Absence;
 import dev.domain.entite.Collegue;
 import dev.domain.enums.EStatutDemandeAbsence;
@@ -36,6 +44,7 @@ import dev.domain.exceptions.CollegueIntrouvableException;
 import dev.domain.services.AbsenceService;
 import dev.domain.services.CollegueService;
 import dev.utils.ConverterDate;
+import dev.utils.DateUtils;
 
 @RestController
 @RequestMapping("absence") // http://localhost:4200/connexion
@@ -48,6 +57,7 @@ public class AbsenceController {
 		this.collegueService = collegueService;
 		this.absenceService = absenceService;
 	}
+
 
 	@GetMapping("liste/en-attente")
 	public ResponseEntity<?> listeAbsenceEnAttente() {
@@ -65,6 +75,28 @@ public class AbsenceController {
 			return ResponseEntity.badRequest().body("Aucune absences existantes");
 		}
 	}
+
+	@GetMapping("liste/valider")
+	public ResponseEntity<?> listeAbsenceValidee() {
+		Optional<List<Absence>> absencesEnAttente = this.absenceService.getAllAbsenceEnAttente();
+		if(absencesEnAttente.isPresent()) {
+			List<Absence> absences = absencesEnAttente.get();
+			List<DtoAbsenceResponseBis> response = absences.stream().map(absence -> new DtoAbsenceResponseBis(
+																							absence.getId(), 
+																							absence.getDatePremierJourAbsence(), 
+																							absence.getDateDernierJourAbsence(), 
+																							absence.getTypeConge().toString(), 
+																							absence.getCollegue().getNom(), 
+																							absence.getCollegue().getPrenom()))
+																	.collect(Collectors.toList());
+
+			return ResponseEntity.ok(response);
+		} else {
+			return ResponseEntity.badRequest().body("Aucune absences existantes");
+		}
+	}
+	
+	
 
 	@PutMapping("valider")
 	public ResponseEntity<?> valideAbsence(@RequestBody @Valid DtoUpdateAbsenceRequestBis dtoUpdateAbsence,
@@ -108,6 +140,28 @@ public class AbsenceController {
 		}
 	}
 
+	@PostMapping("manager/histogramme")
+	public ResponseEntity<?> getAbsenceByDate(@RequestBody @Valid DtoHistogrammeRequest dtoRequest, BindingResult resValid) throws ParseException {
+		if(!resValid.hasErrors()) {
+			String département = dtoRequest.getDepartement();
+			
+			LocalDate dateDebutChoisi = DateUtils.convertStringToLocalDate("01", dtoRequest.getMois(), dtoRequest.getAnnee());
+			LocalDate dateFinChoisi = this.absenceService.getDateMax(dtoRequest.getAnnee(), dtoRequest.getMois());
+			
+			Optional<List<Absence>> absences = this.absenceService.getAllAbsenceByDateInterval(dateDebutChoisi, dateFinChoisi);
+			if(absences.isPresent()) {
+				List<Absence> absencesRecuperees = absences.get();
+				List<DtoHistogrammeResponse> response = absencesRecuperees.stream().map(absence -> new DtoHistogrammeResponse(absence)).collect(Collectors.toList());
+				return ResponseEntity.ok(response);
+			} else {
+				return ResponseEntity.ok(new CollegueIntrouvableException("Aucune absences pour cette intervale !"));
+			}
+		} else {
+			return ResponseEntity.badRequest().body("Un problème est survenu");
+
+		}
+	}
+	
 	@GetMapping("visualisation/user/{id}")
 	public ResponseEntity<?> listerAbsencesByUser(@PathVariable Long id) throws CollegueIntrouvableException {
 		List<Absence> absences = this.absenceService.getAbsencesByUser(id);
@@ -117,6 +171,8 @@ public class AbsenceController {
 		return (absences.size() != 0) ? ResponseEntity.ok(listeAbsenceDto)
 				: ResponseEntity.ok(new DtoAucuneAbsenceResponse("Aucune absence enregistrée"));
 	}
+	
+	
 
 	@GetMapping("all")
 	public ResponseEntity<?> listerAllAbsences() throws CollegueIntrouvableException {
